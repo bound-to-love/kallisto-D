@@ -191,6 +191,7 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
   int plaintext_flag = 0;
   int write_index_flag = 0;
   int single_flag = 0;
+  int long_read_flag = 0; 
   int single_overhang_flag = 0;
   int strand_FR_flag = 0;
   int strand_RF_flag = 0;
@@ -206,6 +207,7 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
     {"plaintext", no_argument, &plaintext_flag, 1},
     {"write-index", no_argument, &write_index_flag, 1},
     {"single", no_argument, &single_flag, 1},
+    {"long", no_argument, &long_read_flag, 1},
     {"single-overhang", no_argument, &single_overhang_flag, 1},
     {"fr-stranded", no_argument, &strand_FR_flag, 1},
     {"rf-stranded", no_argument, &strand_RF_flag, 1},
@@ -306,6 +308,10 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
 
   if (single_flag) {
     opt.single_end = true;
+  }
+
+  if (long_read) {
+    opt.long_read = true; 
   }
 
   if (single_overhang_flag) {
@@ -472,7 +478,8 @@ void ListSingleCellTechnologies() {
 void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
   int verbose_flag = 0;
   int gbam_flag = 0;
-  int paired_end_flag = 0;  
+  int paired_end_flag = 0;
+  int long_read_flag = 0; 
   int aa_flag = 0;
   int strand_FR_flag = 0;
   int strand_RF_flag = 0;
@@ -501,6 +508,7 @@ void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
     {"rf-stranded", no_argument, &strand_RF_flag, 1},
     {"unstranded", no_argument, &unstranded_flag, 1},
     {"paired", no_argument, &paired_end_flag, 1},
+    {"long", no_argument, &long_read_flag, 1},
     {"aa", no_argument, &aa_flag, 1},
     {"inleaved", no_argument, &interleaved_flag, 1},
     {"numReads", required_argument, 0, 'N'},
