@@ -21,6 +21,8 @@ struct MinCollector {
       index(ind),
       counts(index.ecmapinv.size(), 0),
       flens(MAX_FRAG_LEN),
+      flens_lr(index.num_trans),
+      flens_lr_c(index.num_trans),
       bias3(4096),
       bias5(4096),
       min_range(opt.min_range),
@@ -88,6 +90,8 @@ struct MinCollector {
   KmerIndex& index;
   std::vector<uint32_t> counts;
   std::vector<uint32_t> flens;
+  std::vector<uint32_t> flens_lr;
+  std::vector<uint32_t> flens_lr_c;
   std::vector<int32_t> bias3, bias5;
   int min_range;
   int k;
