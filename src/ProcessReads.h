@@ -196,8 +196,14 @@ public:
       transfer_locks.swap(mutexes);
 
       if (opt.batch_mode) { // Set up recording of lengths individually for each batch
-        tlencounts.assign(opt.batch_ids.size(), 0);
-        batchFlens.assign(opt.batch_ids.size(), std::vector<uint32_t>(1000,0));
+        if (opt.long_read) {
+          tlencounts.assign(opt.batch_ids.size(), 0);
+          batchFlens_lr.assign(opt.batch_ids.size(), std::vector<uint32_t>(index.num_trans,0));
+          batchFlens_lr_c.assign(opt.batch_ids.size(), std::vector<uint32_t>(index.num_trans,0));
+        } else {
+          tlencounts.assign(opt.batch_ids.size(), 0);
+          batchFlens.assign(opt.batch_ids.size(), std::vector<uint32_t>(1000,0));
+        }
       }
       if (opt.batch_ids.size() > 0) {
         std::unordered_map<std::string,int> batch_map;
@@ -294,6 +300,8 @@ public:
   std::vector<int> tlencounts;
   std::atomic<int> biasCount;
   std::vector<std::vector<uint32_t>> batchFlens;
+  std::vector<std::vector<uint32_t>> batchFlens_lr;
+  std::vector<std::vector<uint32_t>> batchFlens_lr_c;
   std::vector<std::vector<int32_t>> tmp_bc;
   const int maxBiasCount;
   u_map_<Roaring, uint32_t, RoaringHasher> newECcount;
@@ -348,6 +356,8 @@ public:
   std::vector<std::string> umis;
   std::vector<Roaring> newEcs;
   std::vector<int> flens;
+  std::vector<int> flens_lr;
+  std::vector<int> flens_lr_c;
   std::vector<int> bias5;
 
   std::vector<uint32_t> counts;
@@ -388,6 +398,8 @@ public:
 
   std::vector<Roaring> newEcs;
   std::vector<int> flens;
+  std::vector<int> flens_lr;
+  std::vector<int> flens_lr_c;
   std::vector<int> bias5;
   std::vector<uint32_t> counts;
   std::vector<BUSData> bv;
