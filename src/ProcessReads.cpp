@@ -121,10 +121,12 @@ int64_t ProcessBatchReads(MasterProcessor& MP, const ProgramOptions& opt) {
   size_t numreads = 0;
   size_t nummapped = 0;
 
-  bool paired = !opt.single_end;
+  bool paired = !opt.single_end && !opt.long_read;
 
   if (paired) {
     std::cerr << "[quant] running in paired-end mode" << std::endl;
+  } else if (opt.long_read) {
+    std::cerr << "[quant] running in long read mode" << std::endl;    
   } else {
     std::cerr << "[quant] running in single-end mode" << std::endl;
   }
@@ -171,11 +173,13 @@ int64_t ProcessReads(MasterProcessor& MP, const  ProgramOptions& opt) {
   //int tlencount = (opt.fld == 0.0) ? 10000 : 0;
   size_t numreads = 0;
   size_t nummapped = 0;
-  bool paired = !opt.single_end;
+  bool paired = !opt.single_end && !opt.long_read;
 
 
   if (paired) {
     std::cerr << "[quant] running in paired-end mode" << std::endl;
+  } else if (opt.long_read) {
+    std::cerr << "[quant] running in long read mode" << std::endl;    
   } else {
     std::cerr << "[quant] running in single-end mode" << std::endl;
   }
@@ -244,7 +248,7 @@ int64_t ProcessBUSReads(MasterProcessor& MP, const  ProgramOptions& opt) {
   //int tlencount = (opt.fld == 0.0) ? 10000 : 0;
   size_t numreads = 0;
   size_t nummapped = 0;
-  bool paired = !opt.single_end;
+  bool paired = !opt.single_end && !opt.long_read;
 
   for (int i = 0, si=1; i < opt.files.size(); si++) {
     auto& busopt = opt.busOptions;
@@ -365,7 +369,7 @@ void MasterProcessor::processReads() {
         batchSR.files = opt.batch_files[id+i];
         batchSR.nfiles = opt.batch_files[id+i].size();
         batchSR.reserveNfiles(opt.batch_files[id+i].size());
-        batchSR.paired = !opt.single_end;
+        batchSR.paired = !opt.single_end && !opt.long_read;
         FSRs.push_back(std::move(batchSR));
       }
       
@@ -475,6 +479,24 @@ void MasterProcessor::update(const std::vector<uint32_t>& c, const std::vector<R
         local_tlencount += flens[i];
       }
       tlencount += local_tlencount;
+    }
+  } 
+
+  if (!flens_lr.empty()) {
+    if (opt.batch_mode) {
+      auto &bflen_lr = batchFlens_lr[id];
+      auto &tcount = tlencounts[id];
+      for (int i = 0; i < flens_lr.size(); i++) {
+        bflen_lr[i] += flens_lr[i];
+        tcount[i] += flens_lr_c[i];
+      }
+    } else {
+      auto &local_tlencount = flens_lr_c;
+      for (int i = 0; i < flens_lr.size(); i++) {
+        tc.flens_lr[i] += flens_lr[i];
+        local_tlencount[i] += flens_lr_c[i];
+        tlencount += local_tlencount[i];
+      }
     }
   }
 
@@ -836,7 +858,7 @@ ReadProcessor::ReadProcessor(const KmerIndex& index, const ProgramOptions& opt, 
      batchSR.files = opt.batch_files[id];
      batchSR.nfiles = opt.batch_files[id].size();
      batchSR.reserveNfiles(opt.batch_files[id].size());
-     batchSR.paired = !opt.single_end;
+     batchSR.paired = !opt.single_end && !opt.long_read;
    }
 
    seqs.reserve(bufsize/50);
@@ -861,6 +883,8 @@ ReadProcessor::ReadProcessor(ReadProcessor && o) :
   umis(std::move(o.umis)),
   newEcs(std::move(o.newEcs)),
   flens(std::move(o.flens)),
+  flens_lr(std::move(o.flens_lr)),
+  flens_lr_c(std::move(o.flens_lr_c)),
   bias5(std::move(o.bias5)),
   batchSR(std::move(o.batchSR)),
   counts(std::move(o.counts)) {
@@ -905,7 +929,7 @@ void ReadProcessor::operator()() {
 
     // update the results, MP acquires the lock
     std::vector<BUSData> tmp_v{};
-    mp.update(counts, newEcs, ec_umi, new_ec_umi, paired ? seqs.size()/2 : seqs.size(), flens, bias5, pseudobatch, tmp_v, std::vector<std::pair<BUSData, Roaring>>{}, nullptr, nullptr, id, local_id);
+    mp.update(counts, newEcs, ec_umi, new_ec_umi, paired ? seqs.size()/2 : seqs.size(), flens, flens_lr, flens_lr_c, bias5, pseudobatch, tmp_v, std::vector<std::pair<BUSData, Roaring>>{}, nullptr, nullptr, id, local_id);
     clear();
   }
 }
@@ -916,27 +940,51 @@ void ReadProcessor::processBuffer() {
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2;
   Roaring u, vtmp;
 
-  v1.reserve(1000);
-  v2.reserve(1000);
-
+  if (opt.long_read){
+    v1.reserve(30000);
+  } else {
+    v1.reserve(1000);
+    v2.reserve(1000);
+  }
+  
   const char* s1 = 0;
   const char* s2 = 0;
   int l1, l2;
 
-  bool findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
+  bool findFragmentLength; 
+  if (opt.long_read) {
+    findFragmentLength = (mp.tlencount < 300000); 
+  } else {
+    findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
+  }
   if (mp.opt.batch_mode) {
-    findFragmentLength = (mp.opt.fld == 0) && (mp.tlencounts[id] < 10000);
+    if (opt.long_read) {
+      findFragmentLength = (mp.tlencount < 300000); 
+    } else {
+      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount[id] < 10000);
+    }
   }
 
   int flengoal = 0;
   flens.clear();
+  flens_lr.clear();
+  flens_lr_c.clear();
   if (findFragmentLength) {
-    flengoal = (10000 - mp.tlencount);
+    if (opt.long_read) {
+      flengoal = (300000 - mp.tlencount); 
+    } else {
+      flengoal = (10000 - mp.tlencount);
+    }
     if (flengoal <= 0) {
       findFragmentLength = false;
       flengoal = 0;
     } else {
-      flens.resize(tc.flens.size(), 0);
+      if (opt.long_read) {
+        flens_lr.resize(tc.flens_lr.size(), 0); 
+        flens_lr_c.resize(tc.flens_lr_c.size(), 0); 
+      } else {
+        flens.resize(tc.flens.size(), 0);
+      }
     }
   }
 
@@ -1075,7 +1123,15 @@ void ReadProcessor::processBuffer() {
           flens[tl]++;
           flengoal--;
         }
+      } 
+
+      if (findFragmentLength && flengoal > 0 && opt.long_read && u.cardinality() == 1 && !v1.empty()) {
+        tr = u[0];
+        flens_lr[tr] += l1; 
+        flens_lr_c[tr]++;
+        flengoal--; 
       }
+
     }
 
     // pseudobam
@@ -1150,6 +1206,8 @@ BUSProcessor::BUSProcessor(BUSProcessor && o) :
   flags(std::move(o.flags)),
   newEcs(std::move(o.newEcs)),
   flens(std::move(o.flens)),
+  flens_lr(std::move(o.flens_lr)),
+  flens_lr_c(std::move(o.flens_lr_c)),
   bias5(std::move(o.bias5)),
   bv(std::move(o.bv)),
   batchSR(std::move(o.batchSR)),
@@ -1232,7 +1290,7 @@ void BUSProcessor::operator()() {
     // update the results, MP acquires the lock
     std::vector<std::pair<Roaring, std::string>> ec_umi;
     std::vector<std::pair<Roaring, std::string>> new_ec_umi;
-    mp.update(counts, newEcs, ec_umi, new_ec_umi, seqs.size() / mp.opt.busOptions.nfiles , flens, bias5, pseudobatch, bv, std::move(newB), &bc_len[0], &umi_len[0], id, local_id);
+    mp.update(counts, newEcs, ec_umi, new_ec_umi, seqs.size() / mp.opt.busOptions.nfiles , flens, flens_lr, flens_lr_c, bias5, pseudobatch, bv, std::move(newB), &bc_len[0], &umi_len[0], id, local_id);
     clear();
     if (mp.opt.max_num_reads != 0 && mp.numreads >= mp.opt.max_num_reads) {
       return;
@@ -1245,8 +1303,13 @@ void BUSProcessor::processBuffer() {
   std::vector<std::pair<const_UnitigMap<Node>, int>> v, v2;
   Roaring vtmp, u;
 
-  v.reserve(1000);
-  v2.reserve(1000);
+  if (opt.long_read){
+    v.reserve(30000);
+    v2.reserve(1000);
+  } else {
+    v.reserve(1000);
+    v2.reserve(1000);
+  }
 
   memset(&bc_len[0], 0, sizeof(bc_len));
   memset(&umi_len[0], 0, sizeof(umi_len));
@@ -1260,16 +1323,40 @@ void BUSProcessor::processBuffer() {
   if (mp.opt.batch_mode) {
     tcount = mp.tlencounts[id];
   }
-  bool findFragmentLength = tcount < 10000 && busopt.paired;
+  bool findFragmentLength; 
+  if (busopt.long_read) {
+    findFragmentLength = tcount < 300000; 
+  } else {
+    findFragmentLength = busopt.paired && tcount < 10000;
+  }
+  if (mp.opt.batch_mode) {
+    if (opt.long_read) {
+      findFragmentLength = (mp.tlencount < 300000); 
+    } else {
+      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount[id] < 10000);
+    }
+  }
+
   int flengoal = 0;
   flens.clear();
+  flens_lr.clear();
+  flens_lr_c.clear();
   if (findFragmentLength) {
-    flengoal = (10000 - tcount);
+    if (busopt.long_read) {
+      flengoal = (300000 - tcount); 
+    } else {
+      flengoal = (10000 - tcount);
+    }
     if (flengoal <= 0) {
       findFragmentLength = false;
       flengoal = 0;
     } else {
-      flens.resize(tc.flens.size(), 0);
+      if (busopt.long_read) {
+        flens_lr.resize(tc.flens_lr.size(), 0); 
+        flens_lr_c.resize(tc.flens_lr_c.size(), 0); 
+      } else {
+        flens.resize(tc.flens.size(), 0);
+      }
     }
   }
 
@@ -1279,7 +1366,11 @@ void BUSProcessor::processBuffer() {
   char *bc  = &(buffer[0]);
   //char *seqbuffer[1000];
   std::string seqbuffer;
-  seqbuffer.reserve(1000);
+  if (busopt.long_read) {
+    seqbuffer.reserve(30000);
+  } else {
+    seqbuffer.reserve(1000);
+  }
 
   // actually process the sequence
 
@@ -1566,7 +1657,7 @@ void BUSProcessor::processBuffer() {
         b.flags = (uint32_t) flags[i / jmax];
       }
 
-      if (busopt.paired && getFragLenIfPaired) {
+      if (busopt.paired && getFragLenIfPaired && !busopt.long_read) {
         if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty() && !v2.empty()) {
           // try to map the reads
           int tl = index.mapPair(seq, seqlen, seq2, seqlen2);
@@ -1574,6 +1665,15 @@ void BUSProcessor::processBuffer() {
             flens[tl]++;
             flengoal--;
           }
+        }
+      }
+
+      if (busopt.long_read) {
+        if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty()) {
+          tr = u[0];
+          flens_lr[tr] += seqlen;
+          flens_lr_c[tr]++;
+          flengoal--;
         }
       }
 
