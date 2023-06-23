@@ -850,7 +850,7 @@ void MasterProcessor::outputFusion(const std::stringstream &o) {
 
 
 ReadProcessor::ReadProcessor(const KmerIndex& index, const ProgramOptions& opt, const MinCollector& tc, MasterProcessor& mp, int _id, int _local_id) :
- paired(!opt.single_end), tc(tc), index(index), mp(mp), id(_id), local_id(_local_id) {
+ paired(!opt.single_end && !opt.long_read), tc(tc), index(index), mp(mp), id(_id), local_id(_local_id) {
    // initialize buffer
    bufsize = mp.bufsize;
    buffer = new char[bufsize];
@@ -1178,7 +1178,7 @@ void ReadProcessor::clear() {
 
 
 BUSProcessor::BUSProcessor(/*const*/ KmerIndex& index, const ProgramOptions& opt, const MinCollector& tc, MasterProcessor& mp, int _id, int _local_id) :
- paired(!opt.single_end), bam(opt.bam), num(opt.num), tc(tc), index(index), mp(mp), id(_id), local_id(_local_id), numreads(0) {
+ paired(!opt.single_end && !opt.long_read), bam(opt.bam), num(opt.num), tc(tc), index(index), mp(mp), id(_id), local_id(_local_id), numreads(0) {
    // initialize buffer
    bufsize = mp.bufsize;
    buffer = new char[bufsize];
@@ -1674,11 +1674,11 @@ void BUSProcessor::processBuffer() {
       if (busopt.long_read) {
         if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty()) {
           for ( auto tr : u) {
-						flens_lr[tr] += seqlen;
-          	flens_lr_c[tr]++;
-          	flengoal--;
-    			}    
-				}
+	    flens_lr[tr] += seqlen;
+	    flens_lr_c[tr]++;
+	    flengoal--;
+    	  }    			
+	}
       }
 
       // count the pseudoalignment
@@ -1737,7 +1737,7 @@ void BUSProcessor::clear() {
 
 #ifndef NO_HTSLIB
 AlnProcessor::AlnProcessor(const KmerIndex& index, const ProgramOptions& opt, MasterProcessor& mp, const EMAlgorithm& em, const Transcriptome &model, bool useEM, int _id) :
- paired(!opt.single_end), index(index), mp(mp), em(em), model(model), useEM(useEM), id(_id) {
+ paired(!opt.single_end && !opt.long_read), index(index), mp(mp), em(em), model(model), useEM(useEM), id(_id) {
    // initialize buffer
    bufsize = mp.bufsize;
    buffer = new char[bufsize];
