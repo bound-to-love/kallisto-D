@@ -51,6 +51,7 @@ struct BUSOptions {
   std::vector<BUSOptionSubstr> seq;
 
   bool paired;
+  bool long_read;
   bool aa;
 
   int getBCLength() const {
@@ -118,6 +119,7 @@ struct ProgramOptions {
   bool plaintext;
   bool write_index;
   bool single_end;
+  bool long_read; 
   bool strand_specific;
   bool peek; // only used for H5Dump
   bool bias;
@@ -171,6 +173,7 @@ ProgramOptions() :
   plaintext(false),
   write_index(false),
   single_end(false),
+  long_read(false),
   strand_specific(false),
   peek(false),
   bias(false),
