@@ -963,7 +963,7 @@ void ReadProcessor::processBuffer() {
     if (mp.opt.long_read) {
       findFragmentLength = (mp.tlencount < 300000); 
     } else {
-      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount[id] < 10000);
+      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
     }
   }
 
@@ -981,7 +981,7 @@ void ReadProcessor::processBuffer() {
       findFragmentLength = false;
       flengoal = 0;
     } else {
-      if (opt.long_read) {
+      if (mp.opt.long_read) {
         flens_lr.resize(tc.flens_lr.size(), 0); 
         flens_lr_c.resize(tc.flens_lr_c.size(), 0); 
       } else {
@@ -1128,7 +1128,7 @@ void ReadProcessor::processBuffer() {
       } 
 
       if (findFragmentLength && flengoal > 0 && mp.opt.long_read && u.cardinality() == 1 && !v1.empty()) {
-        auto tr = u[0];
+        auto tr = u.first.maximum();
         flens_lr[tr] += l1; 
         flens_lr_c[tr]++;
         flengoal--; 
@@ -1672,7 +1672,7 @@ void BUSProcessor::processBuffer() {
 
       if (busopt.long_read) {
         if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty()) {
-          auto tr = u[0];
+          auto tr = u.first.maximum();
           flens_lr[tr] += seqlen;
           flens_lr_c[tr]++;
           flengoal--;
