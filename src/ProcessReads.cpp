@@ -1128,10 +1128,11 @@ void ReadProcessor::processBuffer() {
       } 
 
       if (findFragmentLength && flengoal > 0 && mp.opt.long_read && u.cardinality() == 1 && !v1.empty()) {
-        auto tr = u.first.maximum();
-        flens_lr[tr] += l1; 
-        flens_lr_c[tr]++;
-        flengoal--; 
+        for (auto tr : u) {
+     	  	flens_lr[tr] += l1; 
+      	  flens_lr_c[tr]++;
+       		flengoal--; 
+				}
       }
 
     }
@@ -1672,11 +1673,12 @@ void BUSProcessor::processBuffer() {
 
       if (busopt.long_read) {
         if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty()) {
-          auto tr = u.first.maximum();
-          flens_lr[tr] += seqlen;
-          flens_lr_c[tr]++;
-          flengoal--;
-        }
+          for ( auto tr : u) {
+						flens_lr[tr] += seqlen;
+          	flens_lr_c[tr]++;
+          	flengoal--;
+    			}    
+				}
       }
 
       // count the pseudoalignment
