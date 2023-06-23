@@ -80,11 +80,11 @@ struct EMAlgorithm {
     for (i = 0; i < n_iter; ++i) {
       if (recomputeEffLen && (i == min_rounds || i == min_rounds + 500) && !opt.long_read) {
         eff_lens_ = update_eff_lens(all_fl_means, tc_, index_, alpha_, eff_lens_, post_bias_, opt);
-        weight_map_ = calc_weights (tc_.counts, ecmapinv_, eff_lens_);
+        weight_map_ = calc_weights (tc_.counts, index_.ecmapinv_, eff_lens_);
       }
       
       if (recomputeEffLen && (i == min_rounds || i % min_rounds == 0) && opt.long_read) {
-        weight_map_ = calc_weights (tc_.counts, ecmapinv_, eff_lens_);
+        weight_map_ = calc_weights (tc_.counts, index_.ecmapinv_, eff_lens_);
       }
 
 
