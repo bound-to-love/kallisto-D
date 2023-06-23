@@ -2207,7 +2207,8 @@ int main(int argc, char *argv[]) {
 		}
 	      }
                 flensout_f << "\n";
-	      } else {      	
+	      } else {
+		std::vector<uint32_t> fld = MP.batchFlens[id];	
 		for ( size_t i = 0 ; i < fld.size(); ++i ) {
             	  if (i != 0) {
               	    flensout_f << " ";
@@ -2350,6 +2351,7 @@ int main(int argc, char *argv[]) {
       if (num_pseudoaligned == 0) {
         exit(1); // exit with error
       }
+    } 
     } else if (cmd == "merge") {
         cerr << "Deprecated: `kallisto merge` is deprecated. See `kallisto bus`." << endl;
     } else if (cmd == "quant") {
@@ -2475,7 +2477,7 @@ int main(int argc, char *argv[]) {
               #endif
             } else {
               plaintext_writer(opt.output + "/bs_abundance_" + std::to_string(b) + ".tsv",
-                    em.target_names_, em.alpha_, em.eff_lens_, index.target_lens_); // re-use empty input
+                em.target_names_, em.alpha_, em.eff_lens_, index.target_lens_); // re-use empty input
             }
           }
         } else if (opt.bootstrap > 0 && num_pseudoaligned > 0) {
