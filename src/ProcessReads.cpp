@@ -1750,7 +1750,7 @@ AlnProcessor::AlnProcessor(const KmerIndex& index, const ProgramOptions& opt, Ma
      batchSR.files = opt.batch_files[id];
      batchSR.nfiles = opt.batch_files[id].size();
      batchSR.reserveNfiles(opt.batch_files[id].size());
-     batchSR.paired = !opt.single_end;
+     batchSR.paired = !opt.single_end && !opt.long_read;
    }
 
    seqs.reserve(bufsize/50);
