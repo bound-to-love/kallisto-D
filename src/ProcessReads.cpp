@@ -405,7 +405,9 @@ void MasterProcessor::processReads() {
 
 void MasterProcessor::update(const std::vector<uint32_t>& c, const std::vector<Roaring> &newEcs,
                             std::vector<std::pair<Roaring, std::string>>& ec_umi, std::vector<std::pair<Roaring, std::string>> &new_ec_umi,
-                            int n, std::vector<int>& flens, std::vector<int> &bias, const PseudoAlignmentBatch& pseudobatch, std::vector<BUSData> &bv, std::vector<std::pair<BUSData, Roaring>> newBP, int *bc_len, int *umi_len,  int id, int local_id) {
+                            int n, std::vector<int>& flens, std::vector<int>& flens_lr, std::vector<int>& flens_lr_c, std::vector<int> &bias, 
+														 const PseudoAlignmentBatch& pseudobatch, std::vector<BUSData> &bv, std::vector<std::pair<BUSData, Roaring>> newBP, 
+														 int *bc_len, int *umi_len,  int id, int local_id) {
   // acquire the writer lock
   std::lock_guard<std::mutex> lock(this->writer_lock);
   size_t num_new_ecs = 0;
@@ -485,7 +487,7 @@ void MasterProcessor::update(const std::vector<uint32_t>& c, const std::vector<R
   if (!flens_lr.empty()) {
     if (opt.batch_mode) {
       auto &bflen_lr = batchFlens_lr[id];
-      auto &tcount = tlencounts[id];
+      auto &tcount = batchFlens_lr_c[id];
       for (int i = 0; i < flens_lr.size(); i++) {
         bflen_lr[i] += flens_lr[i];
         tcount[i] += flens_lr_c[i];
@@ -940,7 +942,7 @@ void ReadProcessor::processBuffer() {
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2;
   Roaring u, vtmp;
 
-  if (opt.long_read){
+  if (mp.opt.long_read){
     v1.reserve(30000);
   } else {
     v1.reserve(1000);
@@ -952,13 +954,13 @@ void ReadProcessor::processBuffer() {
   int l1, l2;
 
   bool findFragmentLength; 
-  if (opt.long_read) {
+  if (mp.opt.long_read) {
     findFragmentLength = (mp.tlencount < 300000); 
   } else {
     findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
   }
   if (mp.opt.batch_mode) {
-    if (opt.long_read) {
+    if (mp.opt.long_read) {
       findFragmentLength = (mp.tlencount < 300000); 
     } else {
       findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount[id] < 10000);
@@ -970,7 +972,7 @@ void ReadProcessor::processBuffer() {
   flens_lr.clear();
   flens_lr_c.clear();
   if (findFragmentLength) {
-    if (opt.long_read) {
+    if (mp.opt.long_read) {
       flengoal = (300000 - mp.tlencount); 
     } else {
       flengoal = (10000 - mp.tlencount);
@@ -1125,8 +1127,8 @@ void ReadProcessor::processBuffer() {
         }
       } 
 
-      if (findFragmentLength && flengoal > 0 && opt.long_read && u.cardinality() == 1 && !v1.empty()) {
-        tr = u[0];
+      if (findFragmentLength && flengoal > 0 && mp.opt.long_read && u.cardinality() == 1 && !v1.empty()) {
+        auto tr = u[0];
         flens_lr[tr] += l1; 
         flens_lr_c[tr]++;
         flengoal--; 
@@ -1303,7 +1305,7 @@ void BUSProcessor::processBuffer() {
   std::vector<std::pair<const_UnitigMap<Node>, int>> v, v2;
   Roaring vtmp, u;
 
-  if (opt.long_read){
+  if (mp.opt.long_read){
     v.reserve(30000);
     v2.reserve(1000);
   } else {
@@ -1330,10 +1332,10 @@ void BUSProcessor::processBuffer() {
     findFragmentLength = busopt.paired && tcount < 10000;
   }
   if (mp.opt.batch_mode) {
-    if (opt.long_read) {
+    if (busopt.long_read) {
       findFragmentLength = (mp.tlencount < 300000); 
     } else {
-      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount[id] < 10000);
+      findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
     }
   }
 
@@ -1670,7 +1672,7 @@ void BUSProcessor::processBuffer() {
 
       if (busopt.long_read) {
         if (findFragmentLength && flengoal > 0 && u.cardinality() == 1 && !v.empty()) {
-          tr = u[0];
+          auto tr = u[0];
           flens_lr[tr] += seqlen;
           flens_lr_c[tr]++;
           flengoal--;
