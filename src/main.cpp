@@ -312,7 +312,7 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
 
   if (long_read_flag) {
     opt.long_read = true; 
-	}
+  }
 
   if (single_overhang_flag) {
     opt.single_overhang = true;
@@ -507,7 +507,7 @@ void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
     {"fr-stranded", no_argument, &strand_FR_flag, 1},
     {"rf-stranded", no_argument, &strand_RF_flag, 1},
     {"unstranded", no_argument, &unstranded_flag, 1},
-		{"long", no_argument, &long_read_flag, 1},
+    {"long", no_argument, &long_read_flag, 1},
     {"paired", no_argument, &paired_end_flag, 1},
     {"aa", no_argument, &aa_flag, 1},
     {"inleaved", no_argument, &interleaved_flag, 1},
@@ -618,8 +618,8 @@ void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
   if (paired_end_flag) {
     opt.single_end = false;
   } else if (long_read_flag) {
-  	opt.long_read = true; 
-	} else {
+    opt.long_read = true; 
+  } else {
     opt.single_end = true;
   }
   
@@ -1053,9 +1053,9 @@ bool CheckOptionsBus(ProgramOptions& opt) {
         busopt.seq.push_back(BUSOptionSubstr(1,0,0));
         busopt.paired = true;
       }
-			if (opt.long_read) {
-				busopt.long_read = true; 
-			}
+      if (opt.long_read) {
+	busopt.long_read = true; 
+      }
       busopt.umi.push_back(BUSOptionSubstr(-1,-1,-1));
     }
     return ret;
@@ -1494,8 +1494,8 @@ bool CheckOptionsEM(ProgramOptions& opt, bool emonly = false) {
       opt.fld << ", sd = " << opt.sd << endl;
   }
 
-  if (!opt.single_end && (opt.fld > 0.0 && opt.sd > 0.0)) {
-    cerr << "[~warn] you specified using a gaussian but have paired end data" << endl;
+  if (!opt.single_end && !opt.long_read && (opt.fld > 0.0 && opt.sd > 0.0)) {
+    cerr << "[~warn] you specified using a gaussian but have paired end or long read data" << endl;
     cerr << "[~warn] we suggest omitting these parameters and let us estimate the distribution from data" << endl;
   }
 
@@ -1931,7 +1931,7 @@ void usageBus() {
        << "    --rf-stranded             Strand specific reads for UMI-tagged reads, first read reverse" << endl
        << "    --unstranded              Treat all read as non-strand-specific" << endl
        << "    --paired                  Treat reads as paired" << endl
-       << "    --long                  	Treat reads as long" << endl
+       << "    --long                  	 Treat reads as long" << endl
        << "    --aa                      Align to index generated from a FASTA-file containing amino acid sequences" << endl
        << "    --inleaved                Specifies that input is an interleaved FASTQ file" << endl
        << "    --batch-barcodes          Records both batch and extracted barcode in BUS file" << endl
@@ -1990,7 +1990,7 @@ void usageEM(bool valid_input = true) {
        << "    --seed=INT                Seed for the bootstrap sampling (default: 42)" << endl
        << "    --plaintext               Output plaintext instead of HDF5" << endl
        << "    --single                  Quantify single-end reads" << endl
-       << "    --long                  	Quantify long reads" << endl
+       << "    --long                  	 Quantify long reads" << endl
        << "    --single-overhang         Include reads where unobserved rest of fragment is" << endl
        << "                              predicted to lie outside a transcript" << endl
        << "    --fr-stranded             Strand specific reads, first read forward" << endl
@@ -2189,36 +2189,34 @@ int main(int argc, char *argv[]) {
         if (!opt.single_end || opt.technology.empty() || opt.busOptions.paired || opt.busOptions.umi[0].fileno == -1) {
           index.write((opt.output + "/index.saved"), false, opt.threads);
         }
-        // Write out fragment length distributions if reads paired-end:
+        // Write out fragment length distributions if reads paired-end or long:
         if (!opt.single_end) {
           std::ofstream flensout_f((opt.output + "/flens.txt"));
           for (size_t id = 0; id < opt.batch_ids.size(); id++) {
-      			if (opt.long_read) {
-							std::vector<uint32_t> fld_lr = MP.batchFlens_lr[id];
-							std::vector<uint32_t> fld_lr_c = MP.batchFlens_lr_c[id];
- 		         	for ( size_t i = 0 ; i < fld_lr.size(); ++i ) {
-            		if (i != 0) {
+      	    if (opt.long_read) {
+	      std::vector<uint32_t> fld_lr = MP.batchFlens_lr[id];
+	      std::vector<uint32_t> fld_lr_c = MP.batchFlens_lr_c[id];
+ 	      for ( size_t i = 0 ; i < fld_lr.size(); ++i ) {
+            	if (i != 0) {
               	  flensout_f << " ";
               	}
               	if (fld_lr_c[i] != 0) {
-	       		      flensout_f << std::fabs((double)fld_lr[i] / (double)fld_lr_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
- 								} else {
-									flensout_f << std::fabs(index.target_lens_[i] - 31); 
-								}
-							}
-            	flensout_f << "\n";
-						} else {      
-							std::vector<uint32_t> fld = MP.batchFlens[id];
- 		         	for ( size_t i = 0 ; i < fld.size(); ++i ) {
-            		if (i != 0) {
-              	  flensout_f << " ";
-              	}
-              	flensout_f << fld[i];
+	       	  flensout_f << std::fabs((double)fld_lr[i] / (double)fld_lr_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
+ 		} else {
+		  flensout_f << std::fabs(index.target_lens_[i] - 31); 
+		}
+	      }
+                flensout_f << "\n";
+	      } else {      	
+		for ( size_t i = 0 ; i < fld.size(); ++i ) {
+            	  if (i != 0) {
+              	    flensout_f << " ";
+              	  }
+              	  flensout_f << fld[i];
             	}
             	flensout_f << "\n";
-     				}     
-					}
-          flensout_f.close();
+     	      }     
+	    flensout_f.close();
         }
       } else {
         num_processed = ProcessBUSReads(MP, opt);
@@ -2277,8 +2275,8 @@ int main(int argc, char *argv[]) {
           flensout_f << "\n";
           flensout_f.close();
         } else if (opt.busOptions.long_read) {
-					fld = collection.flens_lr; // copy
-					fld_c = collection.flens_lr_c; //copy 
+	  fld = collection.flens_lr; // copy
+	  fld_c = collection.flens_lr_c; //copy 
           // Write out index:
           index.write((opt.output + "/index.saved"), false, opt.threads);
           // Write out fragment length distribution:
@@ -2288,14 +2286,14 @@ int main(int argc, char *argv[]) {
               flensout_f << " ";
             }
             if (fld_c[i] != 0) {
-	            flensout_f << std::fabs((double)fld[i] / (double)fld_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
- 						} else {
-							flensout_f << std::fabs(index.target_lens_[i] - 31); 
-						}
+	      flensout_f << std::fabs((double)fld[i] / (double)fld_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
+ 	    } else {
+	      flensout_f << std::fabs(index.target_lens_[i] - 31); 
+	    }
           }
           flensout_f << "\n";
           flensout_f.close();
-				} else if (opt.busOptions.umi[0].fileno == -1) {
+	} else if (opt.busOptions.umi[0].fileno == -1) {
           // Write out index:
           index.write((opt.output + "/index.saved"), false, opt.threads);
         }
