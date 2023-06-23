@@ -2259,7 +2259,8 @@ int main(int argc, char *argv[]) {
             fp = nullptr;
           }
         }
-        std::vector<uint32_t> fld;
+        std::vector<uint32_t> fld; 
+        std::vector<uint32_t> fld_c;
         if (opt.busOptions.paired) {
           fld = collection.flens; // copy
           collection.compute_mean_frag_lens_trunc();
