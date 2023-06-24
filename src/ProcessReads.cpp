@@ -287,7 +287,7 @@ int64_t ProcessBUSReads(MasterProcessor& MP, const  ProgramOptions& opt) {
 /** -- read processors -- **/
 
 void MasterProcessor::processReads() {
-
+  std::cerr << "Is processReads() reached by long?" << std::endl; 
   // start worker threads
   if (!opt.batch_mode && !opt.bus_mode) {
 
