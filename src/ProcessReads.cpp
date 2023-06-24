@@ -1049,7 +1049,7 @@ void ReadProcessor::processBuffer() {
     if (l1 <= 8){
       std::cerr << "read is too short " << std::endl; std::cerr.flush();
     }
-    if (opt.long_read && l1 > 8){
+    if (mp.opt.long_read && l1 > 8){
       // inspect the positions
       int p = -1;
       KmerEntry val;
@@ -1105,14 +1105,11 @@ void ReadProcessor::processBuffer() {
       // collect the target information
       int ec = -1;
       int r = tc.intersectKmers(vlr, v2, !paired, lr);
-      if (lr.empty()) {
+      if (lr.isEmpty()) {
         if (mp.opt.fusion && !(vlr.empty() || v2.empty())) {
           //searchFusion(index,mp.opt,tc,mp,ec,names[i-1].first,slr,vlr,names[i].first,s2,v2,paired);
         }
-      } else {
-        ec = tc.findEC(lr);
-      }
-
+      } 
 
       if (!vlr.empty()) {
         auto res = findFirstMappingKmer(vlr);
@@ -1121,7 +1118,6 @@ void ReadProcessor::processBuffer() {
         km = um.getMappedHead();
       }
 
-      
       // for each transcript in the pseudoalignment
       for (auto tr : lr) {
         //use:  (pos,sense) = index.findPosition(tr,km,val,p)
