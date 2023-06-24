@@ -1142,7 +1142,7 @@ void ReadProcessor::processBuffer() {
          lr = vtmp; // copy
       }
       std::cerr << "Cardinality of lr " << lr.cardinality() << std::endl; 
-      if (opt.long_read && slr != nullptr && l1 > 8){
+      if (mp.opt.long_read && slr != nullptr && l1 > 8){
         //std::cout << "Deleting slr " << std::endl;
         //std::cout << "slr[0] = " << slr[0] << std::endl; 
         delete[] slr; 
