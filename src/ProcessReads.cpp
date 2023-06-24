@@ -1085,7 +1085,7 @@ void ReadProcessor::processBuffer() {
       } 
       
       //Formerly 5th basepair from either end of read checked, now making 77th basepair in. making 5th at least tmporarily for testing
-      slr = new char[l1-8];=
+      slr = new char[l1-8];
       
       for (int i = 4; i < l1 - 4; i++) {
         slr[i-4] = s1[i];
