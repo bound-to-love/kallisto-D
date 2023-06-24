@@ -940,7 +940,7 @@ void ReadProcessor::processBuffer() {
   std::cerr << "is processBuffer() being reached during long call? paired : " << paired << std::endl; 
   // set up thread variables
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2, vlr;
-  Roaring u, vtmp;
+  Roaring u, lr, vtmp;
 
   if (mp.opt.long_read){
     v1.reserve(10000);
@@ -1049,10 +1049,10 @@ void ReadProcessor::processBuffer() {
     if (l1 <= 8){
       std::cerr << "read is too short " << std::endl; std::cerr.flush();
     }
-    if (long_read && l1 > 8){
+    if (opt.long_read && l1 > 8){
       // inspect the positions
       int p = -1;
-      // KmerEntry val;
+      KmerEntry val;
       const_UnitigMap<Node> um;
       Kmer km;
       if (!v1.empty()) {
@@ -1073,19 +1073,20 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, val, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + l1 <= index.target_lens_[tr]) {
-          vtmp.push_back(tr);
+          vtmp.add(tr);
         } else {
           //pass
         }
         if (!x.second && x.first - l1 >= 0) {
-          vtmp.push_back(tr);
+          vtmp.add(tr);
         } else {
           //pass
         }
       }
-      if (vtmp.size() < u.size()) {
+      if (vtmp.cardinality() < u.cardinality()) {
          u = vtmp;
       }
+      std::cerr << "Cardinality of u " << u.cardinality() << std::endl; 
       
       //Formerly 5th basepair from either end of read checked, now making 77th basepair in. making 5th at least tmporarily for testing
       slr = new char[l1-8];
@@ -1131,19 +1132,20 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, val, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + l1-8 <= index.target_lens_[tr]) {
-          vtmp.push_back(tr);
+          vtmp.add(tr);
         } else {
           //pass
         }
         if (!x.second && x.first - l1-8 >= 0) {
-          vtmp.push_back(tr);
+          vtmp.add(tr);
         } else {
           //pass
         }
       }
-      if (vtmp.size() < lr.size()) {
-         u = vtmp; // copy
+      if (vtmp.cardinality() < lr.cardinality()) {
+         lr = vtmp; // copy
       }
+      std::cerr << "Cardinality of lr " << lr.cardinality() << std::endl; 
       if (long_read && slr != nullptr && l1 > 8){
         //std::cout << "Deleting slr " << std::endl;
         //std::cout << "slr[0] = " << slr[0] << std::endl; 
