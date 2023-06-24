@@ -937,7 +937,6 @@ void ReadProcessor::operator()() {
 }
 
 void ReadProcessor::processBuffer() {
-  std::cerr << "is processBuffer() being reached during long call? paired : " << paired << " long_read " << mp.opt.long_read << std::endl; std::cerr.flush(); 
   // set up thread variables
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2, vlr;
   Roaring u, lr, vtmp;
@@ -1008,7 +1007,6 @@ void ReadProcessor::processBuffer() {
   }
 
   // actually process the sequences
-  std::cerr << "SEQs.size() " << seqs.size() << std::endl; std::cerr.flush(); 
   for (int i = 0; i < seqs.size(); i++) {
 
     s1 = seqs[i].first;
@@ -1051,7 +1049,6 @@ void ReadProcessor::processBuffer() {
       std::cerr << "read is too short " << std::endl; std::cerr.flush();
     }
     if (mp.opt.long_read && l1 > 8){
-      std::cerr << "read is NOT too short " << std::endl; std::cerr.flush();
       // inspect the positions
       int p = -1;
       KmerEntry val;
@@ -1063,7 +1060,6 @@ void ReadProcessor::processBuffer() {
         p = res.second;
         km = um.getMappedHead();
       }
-      std::cerr << "is v1 empty? " << v1.empty() << std::endl; 
 
       // for each transcript in the pseudoalignment
       for (auto tr : u) {
@@ -1087,12 +1083,10 @@ void ReadProcessor::processBuffer() {
       }
       if (vtmp.cardinality() < u.cardinality()) {
          u = vtmp;
-      }
-      std::cerr << "Cardinality of u " << u.cardinality() << std::endl; 
+      } 
       
       //Formerly 5th basepair from either end of read checked, now making 77th basepair in. making 5th at least tmporarily for testing
-      slr = new char[l1-8];
-      //std::cerr << "Reached line 1254" << std::endl; std::cerr.flush();
+      slr = new char[l1-8];=
       
       for (int i = 4; i < l1 - 4; i++) {
         slr[i-4] = s1[i];
