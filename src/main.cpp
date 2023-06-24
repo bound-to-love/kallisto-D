@@ -1061,9 +1061,6 @@ bool CheckOptionsBus(ProgramOptions& opt) {
     }
     return ret;
   } else { // User supplied -x (technology option)
-    if (opt.long_read) {
-      busopt.long_read = true; 
-    }
     int nfiles_per_batch = 0;
     if (opt.batch_mode) { // using -x with batch
       cerr << "[bus] will try running read files supplied in batch file" << endl;
@@ -1119,7 +1116,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
     if (!ret) return false;
     auto& busopt = opt.busOptions;
     busopt.aa = opt.aa;
-
+    busopt.long_read = opt.long_read; 
     busopt.paired = false;
     busopt.keep_fastq_comments = false;
     if (opt.bam) busopt.nfiles = 1; // Note: only 10xV2 has been tested
