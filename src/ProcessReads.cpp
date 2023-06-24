@@ -944,6 +944,7 @@ void ReadProcessor::processBuffer() {
 
   if (mp.opt.long_read){
     v1.reserve(10000);
+    v2.reserve(1000)
   } else {
     v1.reserve(1000);
     v2.reserve(1000);
