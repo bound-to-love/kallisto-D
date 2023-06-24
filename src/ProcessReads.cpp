@@ -937,7 +937,7 @@ void ReadProcessor::operator()() {
 }
 
 void ReadProcessor::processBuffer() {
-
+  std::cerr << "is processBuffer() being reached during long call?" << std::endl; 
   // set up thread variables
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2;
   Roaring u, vtmp;
