@@ -1061,7 +1061,7 @@ void ReadProcessor::processBuffer() {
         p = res.second;
         km = um.getMappedHead();
       }
-
+      std::cerr << "is v1 empty? " << v1.empty() << std::endl; 
 
       // for each transcript in the pseudoalignment
       for (auto tr : u) {
