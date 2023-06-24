@@ -939,11 +939,12 @@ void ReadProcessor::operator()() {
 void ReadProcessor::processBuffer() {
   std::cerr << "is processBuffer() being reached during long call? paired : " << paired << std::endl; 
   // set up thread variables
-  std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2;
+  std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2, vlr;
   Roaring u, vtmp;
 
   if (mp.opt.long_read){
     v1.reserve(10000);
+    vlr.reserve(10000);
     v2.reserve(1000)
   } else {
     v1.reserve(1000);
@@ -952,6 +953,7 @@ void ReadProcessor::processBuffer() {
   
   const char* s1 = 0;
   const char* s2 = 0;
+  char* slr = 0;
   int l1, l2;
 
   bool findFragmentLength; 
@@ -1042,18 +1044,119 @@ void ReadProcessor::processBuffer() {
     }
 
     /* --  possibly modify the pseudoalignment  -- */
+    /* --  possibly modify the pseudoalignment  -- */
 
+    if (l1 <= 8){
+      std::cerr << "read is too short " << std::endl; std::cerr.flush();
+    }
+    if (long_read && l1 > 8){
+      // inspect the positions
+      int p = -1;
+      // KmerEntry val;
+      const_UnitigMap<Node> um;
+      Kmer km;
+      if (!v1.empty()) {
+        auto res = findFirstMappingKmer(vlr);
+        um = res.first;
+        p = res.second;
+        km = um.getMappedHead();
+      }
+
+
+      // for each transcript in the pseudoalignment
+      for (auto tr : u) {
+        //use:  (pos,sense) = index.findPosition(tr,km,val,p)
+        //pre:  index.kmap[km] == val,
+        //      km is the p-th k-mer of a read
+        //      val.contig maps to tr
+        //post: km is found in position pos (1-based) on the sense/!sense strand of tr
+        auto x = index.findPosition(tr, km, val, p);
+        // if the fragment is within bounds for this transcript, keep it
+        if (x.second && x.first + l1 <= index.target_lens_[tr]) {
+          vtmp.push_back(tr);
+        } else {
+          //pass
+        }
+        if (!x.second && x.first - l1 >= 0) {
+          vtmp.push_back(tr);
+        } else {
+          //pass
+        }
+      }
+      if (vtmp.size() < u.size()) {
+         u = vtmp;
+      }
+      
+      //Formerly 5th basepair from either end of read checked, now making 77th basepair in. making 5th at least tmporarily for testing
+      slr = new char[l1-8];
+      //std::cerr << "Reached line 1254" << std::endl; std::cerr.flush();
+      
+      for (int i = 4; i < l1 - 4; i++) {
+        slr[i-4] = s1[i];
+      }
+      
+      vtmp.clear();
+      // inspect the positions
+
+      // Now find the approx. effective length.
+      index.match(slr,l1-8, vlr);
+
+      // collect the target information
+      int ec = -1;
+      int r = tc.intersectKmers(vlr, v2, !paired, lr);
+      if (lr.empty()) {
+        if (mp.opt.fusion && !(vlr.empty() || v2.empty())) {
+          //searchFusion(index,mp.opt,tc,mp,ec,names[i-1].first,slr,vlr,names[i].first,s2,v2,paired);
+        }
+      } else {
+        ec = tc.findEC(lr);
+      }
+
+
+      if (!vlr.empty()) {
+        auto res = findFirstMappingKmer(vlr);
+        um = res.first;
+        p = res.second;
+        km = um.getMappedHead();
+      }
+
+      
+      // for each transcript in the pseudoalignment
+      for (auto tr : lr) {
+        //use:  (pos,sense) = index.findPosition(tr,km,val,p)
+        //pre:  index.kmap[km] == val,
+        //      km is the p-th k-mer of a read
+        //      val.contig maps to tr
+        //post: km is found in position pos (1-based) on the sense/!sense strand of tr
+        auto x = index.findPosition(tr, km, val, p);
+        // if the fragment is within bounds for this transcript, keep it
+        if (x.second && x.first + l1-8 <= index.target_lens_[tr]) {
+          vtmp.push_back(tr);
+        } else {
+          //pass
+        }
+        if (!x.second && x.first - l1-8 >= 0) {
+          vtmp.push_back(tr);
+        } else {
+          //pass
+        }
+      }
+      if (vtmp.size() < lr.size()) {
+         u = vtmp; // copy
+      }
+      if (long_read && slr != nullptr && l1 > 8){
+        //std::cout << "Deleting slr " << std::endl;
+        //std::cout << "slr[0] = " << slr[0] << std::endl; 
+        delete[] slr; 
+      }
+    }
     // If we have paired end reads where one end maps or single end reads, check if some transcsripts
     // are not compatible with the mean fragment length
-    if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && tc.has_mean_fl) {
+    else if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && tc.has_mean_fl) {
       vtmp = Roaring();
       // inspect the positions
-      int fl;
-      if (mp.opt.long_read) {
-        fl = l1; 
-      } else {
-        fl = (int) tc.get_mean_frag_len();
-      }
+      int fl = (int) tc.get_mean_frag_len();
+      
       int p = -1;
       const_UnitigMap<Node> um;
       Kmer km;
