@@ -937,13 +937,13 @@ void ReadProcessor::operator()() {
 }
 
 void ReadProcessor::processBuffer() {
-  std::cerr << "is processBuffer() being reached during long call?" << std::endl; 
+  std::cerr << "is processBuffer() being reached during long call? paired : " << paired << std::endl; 
   // set up thread variables
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2;
   Roaring u, vtmp;
 
   if (mp.opt.long_read){
-    v1.reserve(30000);
+    v1.reserve(10000);
   } else {
     v1.reserve(1000);
     v2.reserve(1000);
@@ -1047,7 +1047,12 @@ void ReadProcessor::processBuffer() {
     if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && tc.has_mean_fl) {
       vtmp = Roaring();
       // inspect the positions
-      int fl = (int) tc.get_mean_frag_len();
+      int fl;
+      if (mp.opt.long_read) {
+        fl = l1; 
+      } else {
+        fl = (int) tc.get_mean_frag_len();
+      }
       int p = -1;
       const_UnitigMap<Node> um;
       Kmer km;
@@ -1073,12 +1078,12 @@ void ReadProcessor::processBuffer() {
         if (x.second && x.first + fl <= (int)index.target_lens_[tr]) {
           vtmp.add(tr);
         } else {
-          //pass
+          continue;//pass
         }
         if (!x.second && x.first - fl >= 0) {
           vtmp.add(tr);
         } else {
-          //pass
+          continue;//pass
         }
       }
 
