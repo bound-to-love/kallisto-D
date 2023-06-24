@@ -937,7 +937,7 @@ void ReadProcessor::operator()() {
 }
 
 void ReadProcessor::processBuffer() {
-  std::cerr << "is processBuffer() being reached during long call? paired : " << paired << std::endl; 
+  std::cerr << "is processBuffer() being reached during long call? paired : " << paired << " long_read " << mp.opt.long_read << std::endl; std::cerr.flush(); 
   // set up thread variables
   std::vector<std::pair<const_UnitigMap<Node>, int32_t> > v1, v2, vlr;
   Roaring u, lr, vtmp;
@@ -1050,6 +1050,7 @@ void ReadProcessor::processBuffer() {
       std::cerr << "read is too short " << std::endl; std::cerr.flush();
     }
     if (mp.opt.long_read && l1 > 8){
+      std::cerr << "read is NOT too short " << std::endl; std::cerr.flush();
       // inspect the positions
       int p = -1;
       KmerEntry val;
