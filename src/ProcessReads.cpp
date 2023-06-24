@@ -1043,7 +1043,7 @@ void ReadProcessor::processBuffer() {
 
     /* --  possibly modify the pseudoalignment  -- */
     /* --  possibly modify the pseudoalignment  -- */
-
+    /*
     if (l1 <= 8){
       std::cerr << "read is too short " << std::endl; std::cerr.flush();
     }
@@ -1140,9 +1140,10 @@ void ReadProcessor::processBuffer() {
         delete[] slr; 
       }
     }
+    */
     // If we have paired end reads where one end maps or single end reads, check if some transcsripts
     // are not compatible with the mean fragment length
-    else if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && tc.has_mean_fl) {
+    if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && tc.has_mean_fl) {
       vtmp = Roaring();
       // inspect the positions
       int fl = (int) tc.get_mean_frag_len();
