@@ -1628,7 +1628,10 @@ void BUSProcessor::processBuffer() {
       // collect the target information
       int r = tc.intersectKmers(v, v2, !busopt.paired, u);
     }
+    
+    std::cerr << "Checking if u is nonempty" << std::endl;
     if (!u.isEmpty()) {
+      std::cerr << "u is nonempty" << std::endl;
       if (index.dfk_onlist) { // In case we want to not intersect D-list targets
         auto usize = u.cardinality();
         u &= index.onlist_sequences;
