@@ -617,6 +617,7 @@ void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
 
   if (paired_end_flag) {
     opt.single_end = false;
+    opt.long_read = false;
   } else if (long_read_flag) {
     opt.long_read = true; 
   } else {
@@ -1060,6 +1061,9 @@ bool CheckOptionsBus(ProgramOptions& opt) {
     }
     return ret;
   } else { // User supplied -x (technology option)
+    if (opt.long_read) {
+      busopt.long_read = true; 
+    }
     int nfiles_per_batch = 0;
     if (opt.batch_mode) { // using -x with batch
       cerr << "[bus] will try running read files supplied in batch file" << endl;
@@ -1236,7 +1240,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
       //bool invalid = ParseTechnology(opt.technology, values, files, errorList, bcValues);
       bool valid = ParseTechnology(opt.technology, busopt, errorList);
       
-      if (busopt.seq.size() == 2 && !opt.single_end) {
+      if (busopt.seq.size() == 2 && !opt.single_end && !opt.long_read) {
         busopt.paired = true;
       }
       
