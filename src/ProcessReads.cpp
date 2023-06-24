@@ -1039,7 +1039,6 @@ void ReadProcessor::processBuffer() {
         exit(1);
         //searchFusion(index,mp.opt,tc,mp,ec,names[i-1].first,s1,v1,names[i].first,s2,v2,paired);
       }
-      //std::cout << s1 << std::endl;
     }
 
     /* --  possibly modify the pseudoalignment  -- */
@@ -1137,10 +1136,7 @@ void ReadProcessor::processBuffer() {
       if (vtmp.cardinality() < lr.cardinality()) {
          lr = vtmp; // copy
       }
-      std::cerr << "Cardinality of lr " << lr.cardinality() << std::endl; 
       if (mp.opt.long_read && slr != nullptr && l1 > 8){
-        //std::cout << "Deleting slr " << std::endl;
-        //std::cout << "slr[0] = " << slr[0] << std::endl; 
         delete[] slr; 
       }
     }
@@ -1195,9 +1191,7 @@ void ReadProcessor::processBuffer() {
     }
 
     // find the ec
-    std::cerr << "Checking if u is nonempty" << std::endl; 
     if (!u.isEmpty()) {
-      std::cerr << "u is nonempty: Are we never seeing anything?" << std::endl; 
       std::lock_guard<std::mutex> lock(mp.transfer_locks[local_id]);
 
       // count the pseudoalignment
