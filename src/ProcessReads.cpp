@@ -1008,6 +1008,7 @@ void ReadProcessor::processBuffer() {
   }
 
   // actually process the sequences
+  std::cerr << "SEQs.size() " << seqs.size() << std::endl; std::cerr.flush(); 
   for (int i = 0; i < seqs.size(); i++) {
 
     s1 = seqs[i].first;
