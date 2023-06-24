@@ -1092,7 +1092,9 @@ void ReadProcessor::processBuffer() {
     }
 
     // find the ec
+    std::cerr << "Checking if u is nonempty" << std::endl; 
     if (!u.isEmpty()) {
+      std::cerr << "u is nonempty: Are we never seeing anything?" << std::endl; 
       std::lock_guard<std::mutex> lock(mp.transfer_locks[local_id]);
 
       // count the pseudoalignment
@@ -1129,12 +1131,11 @@ void ReadProcessor::processBuffer() {
 
       if (findFragmentLength && flengoal > 0 && mp.opt.long_read && u.cardinality() == 1 && !v1.empty()) {
         for (auto tr : u) {
-     	  	flens_lr[tr] += l1; 
+          flens_lr[tr] += l1; 
       	  flens_lr_c[tr]++;
-       		flengoal--; 
-				}
+       	  flengoal--; 
+	}
       }
-
     }
 
     // pseudobam
