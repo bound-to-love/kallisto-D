@@ -2392,6 +2392,7 @@ int main(int argc, char *argv[]) {
         MinCollector collection(index, opt);
         MasterProcessor MP(index, opt, collection, model);
         num_processed = ProcessReads(MP, opt);
+	std::cerr << "opt.long_read " << opt.long_read << std::endl;
 
         // save modified index for future use
         if (opt.write_index) {
