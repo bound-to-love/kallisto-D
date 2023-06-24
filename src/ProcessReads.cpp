@@ -1070,7 +1070,7 @@ void ReadProcessor::processBuffer() {
         //      km is the p-th k-mer of a read
         //      val.contig maps to tr
         //post: km is found in position pos (1-based) on the sense/!sense strand of tr
-        auto x = index.findPosition(tr, km, val, p);
+        auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + l1 <= index.target_lens_[tr]) {
           vtmp.add(tr);
@@ -1129,7 +1129,7 @@ void ReadProcessor::processBuffer() {
         //      km is the p-th k-mer of a read
         //      val.contig maps to tr
         //post: km is found in position pos (1-based) on the sense/!sense strand of tr
-        auto x = index.findPosition(tr, km, val, p);
+        auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + l1-8 <= index.target_lens_[tr]) {
           vtmp.add(tr);
@@ -1146,7 +1146,7 @@ void ReadProcessor::processBuffer() {
          lr = vtmp; // copy
       }
       std::cerr << "Cardinality of lr " << lr.cardinality() << std::endl; 
-      if (long_read && slr != nullptr && l1 > 8){
+      if (opt.long_read && slr != nullptr && l1 > 8){
         //std::cout << "Deleting slr " << std::endl;
         //std::cout << "slr[0] = " << slr[0] << std::endl; 
         delete[] slr; 
