@@ -1226,12 +1226,12 @@ void ReadProcessor::processBuffer() {
         }
       } 
 
-      if (findFragmentLength && flengoal > 0 && mp.opt.long_read && u.cardinality() == 1 && !v1.empty()) {
+      if (findFragmentLength && flengoal > 0 && mp.opt.long_read && !v1.empty()) { //u.cardinality() == 1 && !v1.empty()) {
         for (auto tr : u) {
           flens_lr[tr] += l1; 
       	  flens_lr_c[tr]++;
-       	  flengoal--; 
 	}
+       	flengoal--; 
       }
     }
 
