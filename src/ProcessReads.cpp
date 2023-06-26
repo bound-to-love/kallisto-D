@@ -1229,7 +1229,7 @@ void ReadProcessor::processBuffer() {
 
       if (findFragmentLength && flengoal > 0 && mp.opt.long_read && !v1.empty()) { //u.cardinality() == 1 && !v1.empty()) {
         for (auto tr : u) {
-          std::cerr << "This is recording to flens_lr_c and flens_lr " << flens_lr_c[tr] << " " << flens_lr[tr] << std::endl; std::cerr.flush(); 
+          //std::cerr << "This is recording to flens_lr_c and flens_lr " << flens_lr_c[tr] << " " << flens_lr[tr] << std::endl; std::cerr.flush(); 
           flens_lr[tr] += l1; 
       	  flens_lr_c[tr]++;
 	}
