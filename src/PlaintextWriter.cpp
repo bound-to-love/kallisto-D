@@ -13,7 +13,7 @@ std::vector<double> counts_to_tpm(const std::vector<double>& est_counts,
 
   for (size_t i = 0; i < est_counts.size(); ++i) {
     if (eff_lens[i] < 1.0) {
-      std::cerr << "Why is this eff_len < 1.0? id: " << i << std::endl;
+      std::cerr << "Why is this eff_len < 1.0? id: " << i << " " << eff_lens[i] << std::endl;
     }
     tpm[i] = (est_counts[i] / eff_lens[i]);
     total_mass += tpm[i];
