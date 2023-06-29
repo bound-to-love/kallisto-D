@@ -1145,7 +1145,7 @@ void ReadProcessor::processBuffer() {
     */
     // If we have paired end reads where one end maps or single end reads, check if some transcsripts
     // are not compatible with the mean fragment length
-    if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && (tc.has_mean_fl || mp.opt.long_read)) {
+    if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && (tc.has_mean_fl || (mp.opt.long_read && !v1.empty()))) {
       vtmp = Roaring();
       // inspect the positions
       int fl; 
