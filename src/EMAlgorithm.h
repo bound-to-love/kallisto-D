@@ -45,17 +45,22 @@ struct EMAlgorithm {
     if (opt.long_read){
      assert(tc.flens_lr.size() == index_.target_lens_.size());
      eff_lens_.reserve(tc.flens_lr.size()); 
+     double eff_len; 
      for (int i = 0; i < tc.flens_lr.size(); i++){
        if  (tc.flens_lr_c[i] < 0.000001){
-         eff_lens_.push_back(std::fabs((int)index_.target_lens_[i] - 600));
+         eff_len = std::fabs((int)index_.target_lens_[i] - 600);
        } else {
-         double eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]));
+         eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]));
          if (eff_len < 1.0) {
            std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
            eff_len = std::fabs(eff_len); 
-         }
-         eff_lens_.push_back(eff_len);
+         } 
        }
+       
+       if (eff_len == 0) {
+         eff_len = (double)index_.target_lens_[i];    
+       }
+       eff_lens_.push_back(eff_len);
      }
    }
    else {
