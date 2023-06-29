@@ -486,10 +486,10 @@ void MasterProcessor::update(const std::vector<uint32_t>& c, const std::vector<R
   if (!flens_lr.empty()) {
     if (opt.batch_mode) {
       auto &bflen_lr = batchFlens_lr[id];
-      auto &tcount = batchFlens_lr_c[id];
+      auto &bflen_lr_c = batchFlens_lr_c[id];
       for (int i = 0; i < flens_lr.size(); i++) {
         bflen_lr[i] += flens_lr[i];
-        tcount[i] += flens_lr_c[i];
+        bflen_lr_c[i] += flens_lr_c[i];
       }
     } else {
       auto &local_tlencount = flens_lr_c;
