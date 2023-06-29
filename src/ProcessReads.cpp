@@ -491,7 +491,7 @@ void MasterProcessor::update(const std::vector<uint32_t>& c, const std::vector<R
       for (int i = 0; i < flens_lr.size(); i++) {
         bflen_lr[i] += flens_lr[i];
         bflen_lr_c[i] += flens_lr_c[i];
-	tcount += flens_lr_c[i];
+	tcount[i] += flens_lr_c[i];
       }
     } else {
       auto &local_tlencount = flens_lr_c;
