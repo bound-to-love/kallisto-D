@@ -1146,8 +1146,13 @@ void ReadProcessor::processBuffer() {
     if (!mp.opt.single_overhang && !u.isEmpty() && (!paired || v1.empty() || v2.empty()) && (tc.has_mean_fl || mp.opt.long_read)) {
       vtmp = Roaring();
       // inspect the positions
-      int fl = (int) tc.get_mean_frag_len();
-      
+      int fl; 
+      if (mp.opt.long_read) {
+        fl = l1; 
+      } else {
+        fl = (int) tc.get_mean_frag_len();
+      }
+
       int p = -1;
       const_UnitigMap<Node> um;
       Kmer km;
