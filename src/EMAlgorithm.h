@@ -52,6 +52,7 @@ struct EMAlgorithm {
          double eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]));
          if (eff_len < 1.0) {
            std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
+           eff_len = std::fabs(eff_len); 
          }
          eff_lens_.push_back(eff_len);
        }
