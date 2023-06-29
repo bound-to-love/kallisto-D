@@ -45,8 +45,8 @@ struct EMAlgorithm {
     if (opt.long_read){
      eff_lens_.reserve(tc.flens_lr.size()); 
      for (int i = 0; i < tc.flens_lr.size(); i++){
-       if  (tc.flens_lr_c[i] == 0){
-        eff_lens_.push_back(std::fabs(index_.target_lens_[i] - 600));
+       if  (tc.flens_lr_c[i] < 0.000001){
+         eff_lens_.push_back(std::fabs(index_.target_lens_[i] - 600));
        } else {
          eff_lens_.push_back(index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i])));
        }
