@@ -52,13 +52,9 @@ struct EMAlgorithm {
        } else {
          eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]));
          if (eff_len < 1.0) {
-           std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
-           eff_len = std::fabs(eff_len); 
+           //std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
+           eff_len = 1; //if the average length of a read mapping within a transcript is within 1 of the target length then the average number of positions that the read could begin at is the first.  
          } 
-       }
-       
-       if (eff_len == 0) {
-         eff_len = (double)index_.target_lens_[i];    
        }
        eff_lens_.push_back(eff_len);
      }
