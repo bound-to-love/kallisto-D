@@ -959,13 +959,13 @@ void ReadProcessor::processBuffer() {
 
   bool findFragmentLength; 
   if (mp.opt.long_read) {
-    findFragmentLength = (mp.tlencount < 300000); 
+    findFragmentLength = (mp.tlencount < 1000000); 
   } else {
     findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
   }
   if (mp.opt.batch_mode) {
     if (mp.opt.long_read) {
-      findFragmentLength = (mp.tlencount < 300000); 
+      findFragmentLength = (mp.tlencount < 1000000); 
     } else {
       findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
     }
@@ -977,7 +977,7 @@ void ReadProcessor::processBuffer() {
   flens_lr_c.clear();
   if (findFragmentLength) {
     if (mp.opt.long_read) {
-      flengoal = (300000 - mp.tlencount); 
+      flengoal = (1000000 - mp.tlencount); 
     } else {
       flengoal = (10000 - mp.tlencount);
     }
@@ -1441,7 +1441,7 @@ void BUSProcessor::processBuffer() {
   }
   if (mp.opt.batch_mode) {
     if (busopt.long_read) {
-      findFragmentLength = (mp.tlencount < 300000); 
+      findFragmentLength = (mp.tlencount < 1000000); 
     } else {
       findFragmentLength = (mp.opt.fld == 0) && (mp.tlencount < 10000);
     }
@@ -1453,7 +1453,7 @@ void BUSProcessor::processBuffer() {
   flens_lr_c.clear();
   if (findFragmentLength) {
     if (busopt.long_read) {
-      flengoal = (300000 - tcount); 
+      flengoal = (1000000 - tcount); 
     } else {
       flengoal = (10000 - tcount);
     }
