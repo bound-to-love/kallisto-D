@@ -1199,7 +1199,7 @@ void ReadProcessor::processBuffer() {
     }
 
     // find the ec
-    if (!u.isEmpty() && (!mp.opt.long_read || (mp.opt.long_read && u.cardinality() == 1))) {
+    if (!u.isEmpty()) { //&& (!mp.opt.long_read || (mp.opt.long_read && u.cardinality() == 1))) { //THIS IS FOR ONLY UNIQUELY ALIGNING LONG READS 
       std::lock_guard<std::mutex> lock(mp.transfer_locks[local_id]);
 
       // count the pseudoalignment
