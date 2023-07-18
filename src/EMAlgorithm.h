@@ -141,6 +141,8 @@ struct EMAlgorithm {
 
         // compute the update step
         auto countNorm = counts_[it.second] / denom;
+        
+        std::cerr <<"numEC is " << numEC << std::endl; std::cerr.flush(); 
         for (auto t_it = 0; t_it < numEC; ++t_it) {
           std::cerr <<"alpha is " << alpha_[trs[t_it]] << std::endl; std::cerr.flush(); 
           next_alpha[trs[t_it]] += (wv[t_it] * alpha_[trs[t_it]]) * countNorm;
