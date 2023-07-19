@@ -302,9 +302,9 @@ struct EMAlgorithm {
     for (auto i = 0; i < n; i++) {
       if (em_start.alpha_before_zeroes_[i] >= big) {
         //alpha_[i] = em_start.alpha_before_zeroes_[i];
-        alpha_[i] = sum_counts/(n); //n - count_big 
+        alpha_[i] = sum_counts/(n - count_big); //n - count_big 
       } else {
-        alpha_[i] = sum_counts/(n); //n - count_big
+        alpha_[i] = sum_counts/(n - count_big); //n - count_big
       }
     }
 
