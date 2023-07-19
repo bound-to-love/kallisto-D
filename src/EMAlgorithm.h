@@ -50,7 +50,7 @@ struct EMAlgorithm {
        if  (tc.flens_lr_c[i] < 0.000001){
          eff_len = 31; //(int)index_.target_lens_[i]; //if we are not seeing this transcript uniquely mapping at all then just use the length of the transcript 
        } else {
-         eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]);
+         eff_len = std::fabs((double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i])));
          //eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i]-31*tc.flens_lr_c[i])/double(tc.flens_lr_c[i]));
          //eff_len = 1; //std::fabs(30000 - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i])));
          // the rationale for this is that in sequencing the longer transcripts of a given gene may be less likely to be fully sequenced vs shorter ones of the same gene, so the longer one may look like the shorter one.  
