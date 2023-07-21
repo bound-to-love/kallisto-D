@@ -304,7 +304,7 @@ struct EMAlgorithm {
     int n = alpha_.size();
     for (auto i = 0; i < n; i++) {
       if (em_start.alpha_before_zeroes_[i] >= big) {
-        alpha_[i] = em_start.alpha_before_zeroes_[i];
+        alpha_[i] = counts_[i]; //em_start.alpha_before_zeroes_[i];
         //alpha_[i] = sum_counts/(n - count_big); //n - count_big //uniform on big seemed to work better for both real and simulated data
       } else {
         alpha_[i] = sum_counts/(n - count_big); //n - count_big
