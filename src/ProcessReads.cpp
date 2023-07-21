@@ -1150,7 +1150,7 @@ void ReadProcessor::processBuffer() {
       // inspect the positions
       int fl; 
       if (mp.opt.long_read) {
-        fl = l1 - 30; //allow 30 bp of overhang  
+        fl = l1; // - 30; //allow 30 bp of overhang  
       } else {
         fl = (int) tc.get_mean_frag_len();
       }
