@@ -2701,9 +2701,9 @@ int main(int argc, char *argv[]) {
               FLDs.push_back(tmp_vec);
             }
             if (FLDs.size() != 1 && FLDs.size() != nrow) {
-              std::cerr << "Error: Fragment length distribution file contains "
+              std::cerr << "Warning: Fragment length distribution file contains "
                         << FLDs.size() << " valid lines; expected: " << nrow << std::endl;
-              exit(1);
+              //exit(1);
             }
           } else {
             std::cerr << "Error: could not open file " << opt.fldFile << std::endl;
