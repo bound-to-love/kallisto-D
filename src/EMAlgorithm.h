@@ -101,7 +101,7 @@ struct EMAlgorithm {
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) {
           next_alpha[it.first.maximum()] = counts_[it.second];
-          std::cerr << "cardinality 1 : " << it.first.maximum() << std::endl; std::cerr.flush(); 
+          std::cerr << "cardinality 1 : " << it.first.maximum() << " it.second: " << it.second << " counts_[it.second]: " << counts_[it.second] << std::endl; std::cerr.flush(); 
         }
       }
 
