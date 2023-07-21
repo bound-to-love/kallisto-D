@@ -107,6 +107,7 @@ struct EMAlgorithm {
 
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) { // Individual transcript
+          std::cerr << "Should always enter here with toy error free simulation" << std::endl; std::cerr.flush(); 
           continue;
         }
 
