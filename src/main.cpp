@@ -2694,9 +2694,9 @@ int main(int argc, char *argv[]) {
                 tmp_vec.push_back(tmp_val_num);
               }
               if (tmp_vec.size() != MAX_FRAG_LEN) {
-                std::cerr << "Error: Fragment length distribution file contains a line with "
+                std::cerr << "Warning: Fragment length distribution file contains a line with "
                           << tmp_vec.size() << " values; expected: " << MAX_FRAG_LEN << std::endl;
-                exit(1);
+                //exit(1);
               }
               FLDs.push_back(tmp_vec);
             }
