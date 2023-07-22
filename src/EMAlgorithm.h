@@ -54,7 +54,7 @@ struct EMAlgorithm {
          //eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i]-31*tc.flens_lr_c[i])/double(tc.flens_lr_c[i]));
          //eff_len = 1; //std::fabs(30000 - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i])));
          // the rationale for this is that in sequencing the longer transcripts of a given gene may be less likely to be fully sequenced vs shorter ones of the same gene, so the longer one may look like the shorter one.  
-         if (eff_len < 1.0) {
+         if (eff_len < .000001) {
            //std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
            eff_len = 31; //1; //if the average length of a read mapping within a transcript is within 1 of the target length then the average number of positions that the read could begin at is the first.  
          } 
