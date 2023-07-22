@@ -56,7 +56,7 @@ struct EMAlgorithm {
          // the rationale for this is that in sequencing the longer transcripts of a given gene may be less likely to be fully sequenced vs shorter ones of the same gene, so the longer one may look like the shorter one.  
          if (eff_len < .000001) {
            //std::cerr << "target length: " << index_.target_lens_[i] << " flens_lr: " << tc.flens_lr[i] << " flens_lr_c: " << tc.flens_lr_c[i] << std::endl; std::cerr.flush(); 
-           eff_len = 31; //1; //if the average length of a read mapping within a transcript is within 1 of the target length then the average number of positions that the read could begin at is the first.  
+           eff_len = 1; //1; //if the average length of a read mapping within a transcript is within 1 of the target length then the average number of positions that the read could begin at is the first.  
          } 
        }
        eff_lens_.push_back(eff_len);
