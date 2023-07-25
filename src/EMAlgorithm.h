@@ -101,13 +101,13 @@ struct EMAlgorithm {
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) {
           next_alpha[it.first.maximum()] = counts_[it.second];
-          std::cerr << "cardinality 1 : " << it.first.maximum() << " it.second: " << it.second << " counts_[it.second]: " << counts_[it.second] << std::endl; std::cerr.flush(); 
+          //std::cerr << "cardinality 1 : " << it.first.maximum() << " it.second: " << it.second << " counts_[it.second]: " << counts_[it.second] << std::endl; std::cerr.flush(); 
         }
       }
 
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) { // Individual transcript
-          std::cerr << "Should always enter here with toy error free simulation" << std::endl; std::cerr.flush(); 
+          //std::cerr << "Should always enter here with toy error free simulation" << std::endl; std::cerr.flush(); 
           continue;
         }
 
@@ -147,7 +147,7 @@ struct EMAlgorithm {
         std::cerr << "countNorm: " << countNorm << std::endl; std::cerr.flush();
         //std::cerr <<"numEC is " << numEC << std::endl; std::cerr.flush(); 
         for (auto t_it = 0; t_it < numEC; ++t_it) {
-          std::cerr <<"t_it is: " << t_it << ", alpha is: " << alpha_[trs[t_it]] << " wv[t_it] is: " << wv[t_it] << " trs[t_it] is:" << trs[t_it] << std::endl; std::cerr.flush(); 
+          //std::cerr <<"t_it is: " << t_it << ", alpha is: " << alpha_[trs[t_it]] << " wv[t_it] is: " << wv[t_it] << " trs[t_it] is:" << trs[t_it] << std::endl; std::cerr.flush(); 
           next_alpha[trs[t_it]] += (wv[t_it] * alpha_[trs[t_it]]) * countNorm;
         }
 
