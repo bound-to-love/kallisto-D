@@ -1150,7 +1150,7 @@ void ReadProcessor::processBuffer() {
       // inspect the positions
       int fl; 
       if (mp.opt.long_read) {
-        fl = l1 - 1; // - 30; //allow 30 bp of overhang  
+        fl = l1 - 30; //allow 30 bp of overhang  
       } else {
         fl = (int) tc.get_mean_frag_len();
       }
@@ -1178,12 +1178,16 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + fl <= (int)index.target_lens_[tr]) {
-          vtmp.add(tr);
+	  if (!mp.opt.long_read || (mp.opt.long_read && x.first < 50)){
+            vtmp.add(tr);
+	  }
         } else {
           continue;//pass
         }
         if (!x.second && x.first - fl >= 0) {
-          vtmp.add(tr);
+          if (!mp.opt.long_read || (mp.opt.long_read && ((int)index.target_lens_[tr] - x.first) < 50)){
+            vtmp.add(tr);
+	  }
         } else {
           continue;//pass
         }
@@ -1751,10 +1755,35 @@ void BUSProcessor::processBuffer() {
 
     if (doStrandSpecificityIfPossible && mp.opt.strand_specific && !u.isEmpty()) { // Strand-specificity
       doStrandSpecificity(u, mp.opt.strand, v, v2);
-    }
+    } else if (busopt.long_read) {
+      for (auto tr : u) {
+
+        auto x = index.findPosition(tr, km, um, p);
+        // if the fragment is within bounds for this transcript, keep it
+        if (x.second && x.first + seqlen <= (int)index.target_lens_[tr]) {
+	  if (!busopt.long_read || (busopt.long_read && x.first < 50)){
+            vtmp.add(tr);
+	  }
+        } else {
+          continue;//pass
+        }
+        if (!x.second && x.first - seqlen >= 0) {
+          if (!busopt.long_read || (busopt.long_read && ((int)index.target_lens_[tr] - x.first) < 50)){
+            vtmp.add(tr);
+	  }
+        } else {
+          continue;//pass
+        }
+      }
+
+      if (vtmp.cardinality() < u.cardinality()) {
+        u = vtmp; // copy
+      }
+  }
 
     // find the ec
-    if (!u.isEmpty()) {
+    if (!u.isEmpty()) {// for each transcript in the pseudoalignment
+	    
       BUSData b;
       uint32_t f = 0;
       b.flags = 0;
