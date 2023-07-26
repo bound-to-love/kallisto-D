@@ -1178,7 +1178,7 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + fl <= (int)index.target_lens_[tr]) {
-	  if (!mp.opt.long_read || (mp.opt.long_read && x.first < 40)){
+	  			if (!mp.opt.long_read || (mp.opt.long_read && x.first < 40)){
             vtmp.add(tr);
 	  }
         } else {
@@ -1193,7 +1193,7 @@ void ReadProcessor::processBuffer() {
         }
       }
 
-      if (vtmp.cardinality() < u.cardinality()) {
+      if (1 <= vtmp.cardinality() < u.cardinality()) {
         u = vtmp; // copy
       }
     }
@@ -1787,7 +1787,7 @@ void BUSProcessor::processBuffer() {
         }
       }
 
-      if (vtmp.cardinality() < u.cardinality()) {
+      if (1 <= vtmp.cardinality() < u.cardinality()) {
         u = vtmp; // copy
       }
   }
