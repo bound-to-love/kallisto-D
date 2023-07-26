@@ -1178,14 +1178,14 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + fl <= (int)index.target_lens_[tr]) {
-	  			if (!mp.opt.long_read || (mp.opt.long_read && x.first < 40)){
+	  if (!mp.opt.long_read || (mp.opt.long_read && x.first < 100)){
             vtmp.add(tr);
 	  }
         } else {
           continue;//pass
         }
         if (!x.second && x.first - fl >= 0) {
-          if (!mp.opt.long_read || (mp.opt.long_read && ((int)index.target_lens_[tr] - x.first) < 40)){
+          if (!mp.opt.long_read || (mp.opt.long_read && ((int)index.target_lens_[tr] - x.first) < 100)){
             vtmp.add(tr);
 	  }
         } else {
@@ -1755,7 +1755,7 @@ void BUSProcessor::processBuffer() {
 
     if (doStrandSpecificityIfPossible && mp.opt.strand_specific && !u.isEmpty()) { // Strand-specificity
       doStrandSpecificity(u, mp.opt.strand, v, v2);
-    } else if (busopt.long_read) {
+    } else if (busopt.long_read && !u.isEmpty()) {
       int p = -1;
       const_UnitigMap<Node> um;
       Kmer km;
@@ -1772,14 +1772,14 @@ void BUSProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + (seqlen - 30) <= (int)index.target_lens_[tr]) {
-	  if (!busopt.long_read || (busopt.long_read && x.first < 40)){
+	  if (!busopt.long_read || (busopt.long_read && x.first < 100)){
             vtmp.add(tr);
 	  }
         } else {
           continue;//pass
         }
         if (!x.second && x.first - (seqlen - 30) >= 0) {
-          if (!busopt.long_read || (busopt.long_read && ((int)index.target_lens_[tr] - x.first) < 40)){
+          if (!busopt.long_read || (busopt.long_read && ((int)index.target_lens_[tr] - x.first) < 100)){
             vtmp.add(tr);
 	  }
         } else {
