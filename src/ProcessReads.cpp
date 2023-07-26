@@ -1755,7 +1755,9 @@ void BUSProcessor::processBuffer() {
 
     if (doStrandSpecificityIfPossible && mp.opt.strand_specific && !u.isEmpty()) { // Strand-specificity
       doStrandSpecificity(u, mp.opt.strand, v, v2);
-    } else if (busopt.long_read && !u.isEmpty()) {
+    } 
+
+    if (busopt.long_read && !u.isEmpty()) {
       int p = -1;
       const_UnitigMap<Node> um;
       Kmer km;
