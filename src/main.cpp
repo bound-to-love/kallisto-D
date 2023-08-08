@@ -2201,10 +2201,10 @@ int main(int argc, char *argv[]) {
             	if (i != 0) {
               	  flensout_f << " ";
               	}
-              	if (fld_lr_c[i] != 0) {
+              	if (fld_lr_c[i] > 0.0001) {
 	       	  flensout_f << std::fabs(index.target_lens_[i] - (double)fld_lr[i] / (double)fld_lr_c[i]); // take mean of recorded uniquely aligning read lengths 
  		} else {
-		  flensout_f << std::fabs(31); 
+		  flensout_f << std::fabs(index.target_lens_[i]); 
 		}
 	      }
                 flensout_f << "\n";
