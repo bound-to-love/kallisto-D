@@ -1481,7 +1481,7 @@ void BUSProcessor::processBuffer() {
   //char *seqbuffer[1000];
   std::string seqbuffer;
   if (busopt.long_read) {
-    seqbuffer.reserve(1000);
+    seqbuffer.reserve(15000);
   } else {
     seqbuffer.reserve(1000);
   }
@@ -1757,6 +1757,7 @@ void BUSProcessor::processBuffer() {
       doStrandSpecificity(u, mp.opt.strand, v, v2);
     } 
 
+    /***
     if (busopt.long_read && !u.isEmpty()) {
       int p = -1;
       const_UnitigMap<Node> um;
@@ -1793,6 +1794,7 @@ void BUSProcessor::processBuffer() {
         u = vtmp; // copy
       }
   }
+  ***/
 
     // find the ec
     if (!u.isEmpty()) {// for each transcript in the pseudoalignment
