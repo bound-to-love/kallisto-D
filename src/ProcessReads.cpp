@@ -1481,7 +1481,7 @@ void BUSProcessor::processBuffer() {
   //char *seqbuffer[1000];
   std::string seqbuffer;
   if (busopt.long_read) {
-    seqbuffer.reserve(10000);
+    seqbuffer.reserve(1000);
   } else {
     seqbuffer.reserve(1000);
   }
