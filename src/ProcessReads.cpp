@@ -1418,7 +1418,7 @@ void BUSProcessor::processBuffer() {
   Roaring vtmp, u;
 
   if (mp.opt.long_read){
-    v.reserve(10000);
+    v.reserve(1000);
     v2.reserve(1000);
   } else {
     v.reserve(1000);
@@ -1481,7 +1481,7 @@ void BUSProcessor::processBuffer() {
   //char *seqbuffer[1000];
   std::string seqbuffer;
   if (busopt.long_read) {
-    seqbuffer.reserve(30000);
+    seqbuffer.reserve(10000);
   } else {
     seqbuffer.reserve(1000);
   }
