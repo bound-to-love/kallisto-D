@@ -1150,7 +1150,7 @@ void ReadProcessor::processBuffer() {
       // inspect the positions
       int fl; 
       if (mp.opt.long_read) {
-        fl = l1 - 30; //allow 30 bp of overhang  
+        fl = 0; //don't even check; l1 - 30; //allow 30 bp of overhang  
       } else {
         fl = (int) tc.get_mean_frag_len();
       }
@@ -1178,16 +1178,16 @@ void ReadProcessor::processBuffer() {
         auto x = index.findPosition(tr, km, um, p);
         // if the fragment is within bounds for this transcript, keep it
         if (x.second && x.first + fl <= (int)index.target_lens_[tr]) {
-	  if (!mp.opt.long_read || (mp.opt.long_read && x.first < 5)){
+	  //if (!mp.opt.long_read || (mp.opt.long_read && x.first < 5)){
             vtmp.add(tr);
-	  }
+	  //}
         } else {
           continue;//pass
         }
         if (!x.second && x.first - fl >= 0) {
-          if (!mp.opt.long_read || (mp.opt.long_read && ((int)index.target_lens_[tr] - x.first) < 5)){
+          //if (!mp.opt.long_read || (mp.opt.long_read && ((int)index.target_lens_[tr] - x.first) < 5)){
             vtmp.add(tr);
-	  }
+	      //}
         } else {
           continue;//pass
         }
@@ -1418,7 +1418,7 @@ void BUSProcessor::processBuffer() {
   Roaring vtmp, u;
 
   if (mp.opt.long_read){
-    v.reserve(30000);
+    v.reserve(10000);
     v2.reserve(1000);
   } else {
     v.reserve(1000);
@@ -1439,7 +1439,7 @@ void BUSProcessor::processBuffer() {
   }
   bool findFragmentLength; 
   if (busopt.long_read) {
-    findFragmentLength = tcount < 300000; 
+    findFragmentLength = tcount < 1000000; 
   } else {
     findFragmentLength = busopt.paired && tcount < 10000;
   }
