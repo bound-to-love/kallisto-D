@@ -99,12 +99,14 @@ struct EMAlgorithm {
       }
 
 
+      /*** should this go after main loop? 
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) {
           next_alpha[it.first.maximum()] = counts_[it.second];
           //std::cerr << "cardinality 1 : " << it.first.maximum() << " it.second: " << it.second << " counts_[it.second]: " << counts_[it.second] << std::endl; std::cerr.flush(); 
         }
       }
+      ***/
 
       for (const auto& it : ecmapinv_) {
         if (it.first.cardinality() == 1) { // Individual transcript
@@ -209,6 +211,14 @@ struct EMAlgorithm {
         }
       }
 
+    }
+
+    //TRYING PLACING HERE INSTEAD 
+    for (const auto& it : ecmapinv_) {
+      if (it.first.cardinality() == 1) {
+        next_alpha[it.first.maximum()] += counts_[it.second];
+        //std::cerr << "cardinality 1 : " << it.first.maximum() << " it.second: " << it.second << " counts_[it.second]: " << counts_[it.second] << std::endl; std::cerr.flush(); 
+      }
     }
 
     // ran for the maximum number of iterations
