@@ -1528,10 +1528,12 @@ donejumping:
       ***/
     // backup plan, let's play it safe and search incrementally for the rest, until nextStop
       for (int j = 0; kit != kit_end; ++kit,++j) {
+        /***
         if (j==skip) {
           j=0;
         }
         if (j==0) {
+        ***/
           // need to check it
           const_UnitigMap<Node> um4 = dbg.find(kit->first);
           if (!um4.isEmpty) {
@@ -1550,7 +1552,7 @@ donejumping:
               }
             }
             v.push_back({um4, kit->second}); // add equivalence class, and position
-          }
+          //}
         }
 /***
         if (kit->second >= nextPos) {
