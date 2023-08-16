@@ -1558,8 +1558,8 @@ donejumping:
           break; // break out of backoff for loop
         }
       }
-    }
-  } ***/
+    } ***/
+  } 
 }
 
 std::pair<int,bool> KmerIndex::findPosition(int tr, Kmer km, int p) const{
