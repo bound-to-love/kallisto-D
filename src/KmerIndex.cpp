@@ -1382,11 +1382,33 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     // ::countNonNN = 0;
   }
 
+  size_t proc = 0;
+  while (proc < l - k + 1) {
+    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
+    if (um.isEmpty) {
+      proc++;
+      continue;
+    }
+
+    n = um.getData();
+    uint32_t curr_ec = n->ec[um.dist];
+    v.emplace_back(um, proc);
+    // Add one entry to v for each EC that is part of the mosaic EC of the contig.
+    for (size_t i = 0; i < um.len; ++i) {
+      if (n->ec[um.dist + i] != curr_ec) {
+        curr_ec = n->ec[um.dist + i];
+        v.emplace_back(dbg.find(um.getUnitigKmer(um.dist + i)), proc + i);
+      }
+    }
+    proc += um.len;
+  }
+
+  /***
   KmerIterator kit(s), kit_end;
   bool backOff = false;
   int nextPos = 0; // nextPosition to check
   Roaring rtmp;
-  /***
+  
   for (int i = 0;  kit != kit_end; ++i,++kit) {
 
     // need to check it
@@ -1525,15 +1547,13 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 donejumping:
 
     if (backOff) {
-      ***/
+      
     // backup plan, let's play it safe and search incrementally for the rest, until nextStop
       for (int j = 0; kit != kit_end; ++kit,++j) {
-        /***
         if (j==skip) {
           j=0;
         }
         if (j==0) {
-        ***/
           // need to check it
           const_UnitigMap<Node> um4 = dbg.find(kit->first);
           if (!um4.isEmpty) {
@@ -1552,16 +1572,16 @@ donejumping:
               }
             }
             v.push_back({um4, kit->second}); // add equivalence class, and position
-          //}
+          }
         }
-/***
+
         if (kit->second >= nextPos) {
           backOff = false;
           break; // break out of backoff for loop
         }
       }
-    } ***/
-  } 
+    } 
+  } ***/
 }
 
 std::pair<int,bool> KmerIndex::findPosition(int tr, Kmer km, int p) const{
