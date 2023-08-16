@@ -1386,6 +1386,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   bool backOff = false;
   int nextPos = 0; // nextPosition to check
   Roaring rtmp;
+  /***
   for (int i = 0;  kit != kit_end; ++i,++kit) {
 
     // need to check it
@@ -1524,7 +1525,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 donejumping:
 
     if (backOff) {
-      // backup plan, let's play it safe and search incrementally for the rest, until nextStop
+      ***/
+    // backup plan, let's play it safe and search incrementally for the rest, until nextStop
       for (int j = 0; kit != kit_end; ++kit,++j) {
         if (j==skip) {
           j=0;
@@ -1550,14 +1552,14 @@ donejumping:
             v.push_back({um4, kit->second}); // add equivalence class, and position
           }
         }
-
+/***
         if (kit->second >= nextPos) {
           backOff = false;
           break; // break out of backoff for loop
         }
       }
     }
-  }
+  } ***/
 }
 
 std::pair<int,bool> KmerIndex::findPosition(int tr, Kmer km, int p) const{
