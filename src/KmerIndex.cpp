@@ -1391,12 +1391,12 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     }
 
     n = um.getData();
-    const Roaring& curr_ec = n->ec[um.dist].getIndices();
+    size_t curr_ec = 0;
     v.emplace_back({um, proc});
     // Add one entry to v for each EC that is part of the mosaic EC of the contig.
     for (size_t i = 0; i < um.len; ++i) {
-      if (!(um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
-        const Roaring& curr_ec = n->ec[(um.dist + i)].getIndices();
+      if (!(n->ec[um.dist + curr_ec] == n->ec[um.dist + i])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
+        curr_ec = i;
         v.emplace_back({dbg.find(um.getUnitigKmer(um.dist + i)), proc + i});
       }
     }
