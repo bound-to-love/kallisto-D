@@ -1389,7 +1389,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
       proc++;
       continue;
     }      
-    v.emplace_back(um, proc);
+    v.push_back({um, proc});
  
     n = um.getData();
     // Add one entry to v for each EC that is part of the mosaic EC of the contig.
@@ -1420,7 +1420,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         }
         if (!(n->ec[curr_pos] == n->ec[nextPos])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
             curr_pos = nextPos;
-            v.emplace_back(dbg.find(um.getUnitigKmer(curr_pos)), curr_pos);
+            v.push_back({dbg.find(um.getUnitigKmer(curr_pos)), curr_pos});
             std::cout << "Is it ever entering here?" << std::endl; 
         } else {
             curr_pos++; 
