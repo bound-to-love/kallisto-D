@@ -1416,11 +1416,13 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
             nextPos = l-k;
           }
         } else {
-          nextPos = proc++;
+          nextPos = curr_pos+1;
         }
         if (!(n->ec[curr_pos] == n->ec[nextPos])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
             curr_pos = nextPos;
             v.emplace_back(dbg.find(um.getUnitigKmer(curr_pos)), curr_pos);
+        } else {
+            curr_pos++; 
         }
     }
     proc += um.len;
