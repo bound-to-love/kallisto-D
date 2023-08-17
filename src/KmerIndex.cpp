@@ -1421,7 +1421,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         if (!(n->ec[curr_pos] == n->ec[nextPos])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
             curr_pos = nextPos;
             v.push_back({dbg.find(um.getUnitigKmer(curr_pos)), curr_pos});
-            std::cout << "Is it ever entering here?" << std::endl; 
+            //std::cout << "Is it ever entering here?" << std::endl; 
         } else {
             curr_pos++; 
         }
