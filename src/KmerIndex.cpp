@@ -1410,7 +1410,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         int nextPos; 
         if (dist >= 2) {
           // where should we jump to?
-          nextPos = proc+dist; // default jump
+          nextPos = curr_pos+dist; // default jump
         
           if (proc + dist >= l-k) {
             // if we can jump beyond the read, check the end
