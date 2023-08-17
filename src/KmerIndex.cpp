@@ -1388,17 +1388,39 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     if (um.isEmpty) {
       proc++;
       continue;
-    }
-
-    n = um.getData();
-    size_t curr_ec = 0;
+    }      
     v.emplace_back(um, proc);
+ 
+    n = um.getData();
     // Add one entry to v for each EC that is part of the mosaic EC of the contig.
-    for (size_t i = 0; i < um.len; ++i) {
-      if (!(n->ec[um.dist + curr_ec] == n->ec[um.dist + i])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
-        curr_ec = i;
-        v.emplace_back(dbg.find(um.getUnitigKmer(um.dist + i)), proc + i);
-      }
+    size_t curr_pos = um.dist;
+    size_t contig_start = curr_ec, contig_length = um.size - k + 1;
+    auto p = n->get_mc_contig(um.dist);
+    while (curr_pos < um.len) {
+        p = n->get_mc_contig(curr_pos);
+        contig_start += p.first;
+        contig_length = p.second - contig_start;
+        // Looks like kallisto thinks that canonical kmer means forward strand?
+        //bool forward = (um.strand == (kit->first == kit->first.rep()));
+        bool forward = um.strand;
+        int dist = (forward) ? (contig_length - 1 - (um.dist - contig_start)) : um.dist - contig_start;
+        
+        // see if we can skip ahead
+        if (dist >= 2) {
+          // where should we jump to?
+          int nextPos = proc+dist; // default jump
+        
+          if (proc + dist >= l-k) {
+            // if we can jump beyond the read, check the end
+            nextPos = l-k;
+          }
+        } else {
+          int nextPos = proc++;
+        }
+        if (!(n->ec[curr_pos] == n->ec[nextPos])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
+            curr_pos = nextPos;
+            v.emplace_back(dbg.find(um.getUnitigKmer(curr_pos)), curr_pos);
+        }
     }
     proc += um.len;
   }
