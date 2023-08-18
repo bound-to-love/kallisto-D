@@ -1396,7 +1396,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     size_t curr_pos = um.dist;
     size_t contig_start = 0, contig_length = um.size - k + 1;
     auto p = n->get_mc_contig(um.dist);
-    while (curr_pos < um.dist + um.len) {
+    while (curr_pos < um.len) {
         //std::cout << "curr_pos: " << curr_pos << std::endl; 
         p = n->get_mc_contig(curr_pos);
         contig_start += p.first;
