@@ -72,7 +72,7 @@ struct EMAlgorithm {
 
   ~EMAlgorithm() {}
 
-  void run(size_t n_iter = 10000, size_t min_rounds=5000, bool verbose = true, bool recomputeEffLen = true) {
+  void run(size_t n_iter = 10000, size_t min_rounds=50, bool verbose = true, bool recomputeEffLen = true) {
     std::vector<double> next_alpha(alpha_.size(), 0.0);
 
     assert(weight_map_.size() <= counts_.size());
