@@ -1383,8 +1383,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   }
 
   size_t proc = 0;
-  while (proc < l - k + 1) {
-    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l - 1);
+  while (proc < l - k) {
+    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
     if (um.isEmpty || um.len == 0) {
       proc++;
       continue;
@@ -1412,7 +1412,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
           // where should we jump to?
           nextPos = curr_pos+dist; // default jump
         
-          if (curr_pos + dist >= l-k) {
+          if (nextPos > l-k) {
             // if we can jump beyond the read, check the end
             nextPos = l-k;
           }
