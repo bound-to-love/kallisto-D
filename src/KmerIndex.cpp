@@ -1383,7 +1383,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   }
 
   size_t proc = 0;
-  while (proc < l - k + 1) {
+  while (proc < l - k) {
     const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
     if (um.isEmpty || um.len == 0) {
       proc++;
