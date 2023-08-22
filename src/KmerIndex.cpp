@@ -1399,7 +1399,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     while (curr_pos < um.len) {
         //std::cout << "curr_pos: " << curr_pos << std::endl; 
         p = n->get_mc_contig(curr_pos);
-        contig_start += p.first;
+        contig_start = p.first;
         size_t contig_length = p.second - contig_start;
         // Looks like kallisto thinks that canonical kmer means forward strand?
         //bool forward = (um.strand == (kit->first == kit->first.rep()));
