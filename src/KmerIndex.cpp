@@ -1408,9 +1408,11 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         
         // see if we can skip ahead
         int nextPos; 
+        int midPos=0;
         if (dist >= 2) {
           // where should we jump to?
           nextPos = curr_pos+dist; // default jump
+          midPos = curr_pos+dist/2; 
         
           if (nextPos > l-k) {
             // if we can jump beyond the read, check the end
@@ -1425,6 +1427,13 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
             //std::cout << "Is it ever entering here?" << std::endl; 
         } else {
             curr_pos = nextPos; 
+        }
+
+        if (midPos != 0) {
+            if (!(n->ec[curr_pos] == n->ec[midPos])) { //um.getData()->ec[(um.dist + i)].getIndices() == curr_ec)) {
+                v.push_back({dbg.find(um.getUnitigKmer(midPos)), midPos});
+                //std::cout << "Is it ever entering here?" << std::endl; 
+            }
         }
     }
     //std::cout << "proc: " << proc << std::endl; 
