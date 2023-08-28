@@ -1445,6 +1445,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   */
 
   //Refactoring for exact match with jumping logic 
+  Roaring rtmp;
   size_t proc = 0;
   while (proc < l - k) {
     const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
@@ -1495,7 +1496,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         // check next position
         //KmerIterator kit2(kit);
         //kit2 += nextPos-pos;
-        if (nextPos != l) {
+        if (nextPos < l) {
           const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); //const_UnitigMap<Node> um2 = dbg.find(kit2->first);
           bool found2 = false;
           int  found2pos = pos+dist;
@@ -1527,7 +1528,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
               //KmerIterator kit3(kit);
               //kit3 += middlePos-pos;
 
-              if (kit3 != kit_end) {
+              if (found3pos < l) {
                 const_UnitigMap<Node> um3 = dbg.findUnitig(s, middlePos, l); //const_UnitigMap<Node> um3 = dbg.find(kit3->first);
                 if (!um3.isEmpty) {
                   if (um.isSameReferenceUnitig(um3) &&
@@ -1591,7 +1592,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                             }
                           }    
                         }
-                        v.push_back({um4, kit->second}); // add equivalence class, and position
+                        v.push_back({um4, proc}); // add equivalence class, and position
                     }
                 }
             }
