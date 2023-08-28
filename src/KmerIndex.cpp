@@ -1599,12 +1599,12 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
             } 
             }
           }
-      }  /*
+      }  
          else {
           // the sequence is messed up at this point, let's just take the match
           //v.push_back({dbGraph.ecs[val.contig], l-k});
           break;
-        }*/
+        }
       }
     }
   
