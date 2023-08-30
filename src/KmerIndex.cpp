@@ -1540,6 +1540,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                     foundMiddle = true;
                     found3pos = pos+dist;
                     proc=found3pos;
+										pos = proc; 
                   }
                 }
 
@@ -1562,6 +1563,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                     break;
                   } else {
                     proc=found2pos;//kit = kit2;
+										pos=proc; 
                   }
                 }
               }
@@ -1569,8 +1571,10 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 
             if (!foundMiddle) {
               ++proc; //++kit;
+							pos=proc; 
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
               for (int j = 0; proc < nextPos; ++proc,++j) {
+								pos=proc; 
                 if (j==skip) {
                   j=0;
                 }
