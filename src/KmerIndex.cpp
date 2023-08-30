@@ -1571,10 +1571,10 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 
             if (!foundMiddle) {
               ++proc; //++kit;
-							pos=proc; 
+	      pos=proc; 
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
               for (int j = 0; proc < nextPos; ++proc,++j) {
-								pos=proc; 
+		pos=proc; 
                 if (j==skip) {
                   j=0;
                 }
@@ -1584,33 +1584,33 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                   if (!um4.isEmpty) {
                     // if k-mer found
                     if (partial) {
+		      if (rtmp.isEmpty()) {
+                        const auto& rtmp2 = um4.getData()->ec[um4.dist].getIndices();
+                        if (!rtmp2.isEmpty()) rtmp = std::move(rtmp2);
+                      } else {
+                        const auto& rtmp2 = um4.getData()->ec[um4.dist].getIndices();
+                        if (!rtmp2.isEmpty()) rtmp &= rtmp2;
                         if (rtmp.isEmpty()) {
-                            const auto& rtmp2 = um4.getData()->ec[um4.dist].getIndices();
-                            if (!rtmp2.isEmpty()) rtmp = std::move(rtmp2);
-                        } else {
-                            const auto& rtmp2 = um4.getData()->ec[um4.dist].getIndices();
-                            if (!rtmp2.isEmpty()) rtmp &= rtmp2;
-                            if (rtmp.isEmpty()) {
-                              v.clear();
-                              return;
-                            }
-                          }    
+                          v.clear();
+                          return;
                         }
-                        v.push_back({um4, proc}); // add equivalence class, and position
+                      }    
                     }
+                    v.push_back({um4, proc}); // add equivalence class, and position
+                  }
                 }
-            }
+              }
             } 
-            }
           }
-      }  
-         else {
-          // the sequence is messed up at this point, let's just take the match
-          //v.push_back({dbGraph.ecs[val.contig], l-k});
-          break;
         }
+      }  
+      else {
+        // the sequence is messed up at this point, let's just take the match
+        //v.push_back({dbGraph.ecs[val.contig], l-k});
+        break;
       }
     }
+  }
   
 
   /***
