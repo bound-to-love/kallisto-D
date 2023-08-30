@@ -1600,6 +1600,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                   }
                 }
               }
+	      proc = l; //this is checking if jump logic works how I am suspecting it is working 
             } 
           }
         }
