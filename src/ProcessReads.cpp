@@ -146,8 +146,10 @@ int64_t ProcessBatchReads(MasterProcessor& MP, const ProgramOptions& opt) {
 
   std::cerr << "which function is being called? This is ProcessBatchReads" << std::endl; std::cerr.flush();
   MP.processReads();
+  std::cerr << "is it returning from processReads()? This is ProcessBatchReads" << std::endl; std::cerr.flush();
   numreads = MP.numreads;
   nummapped = MP.nummapped;
+  std::cerr << "is it reaching initializing numreads and nummapped? This is ProcessBatchReads" << std::endl; std::cerr.flush();
 
   std::cerr << " done" << std::endl;
 
