@@ -339,6 +339,7 @@ void MasterProcessor::processReads() {
     // let the workers do their thing
     for (int i = 0; i < opt.threads; i++) {
       workers[i].join(); //wait for them to finish
+      std::cerr << "Joining threads i = " << i << std::endl; std::cerr.flush(); 
     }
 
     // now handle the modification of the mincollector
@@ -348,6 +349,7 @@ void MasterProcessor::processReads() {
       index.ecmapinv.insert({u,ec});
     }
     tc.counts.resize(index.ecmapinv.size(), 0);
+    std::cerr << "Does it reach the end of bus if option ??? " << std::endl; std::cerr.flush();  
 
   } else if (opt.batch_mode) {
     std::vector<std::thread> workers;
