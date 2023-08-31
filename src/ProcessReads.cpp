@@ -144,6 +144,7 @@ int64_t ProcessBatchReads(MasterProcessor& MP, const ProgramOptions& opt) {
 
   std::cerr << "[quant] finding pseudoalignments for all files ..."; std::cerr.flush();
 
+  std::cerr << "which function is being called? This is ProcessBatchReads" << std::endl; std::cerr.flush();
   MP.processReads();
   numreads = MP.numreads;
   nummapped = MP.nummapped;
