@@ -1418,8 +1418,8 @@ void BUSProcessor::processBuffer() {
   Roaring vtmp, u;
 
   if (mp.opt.long_read){
-    v.reserve(1000);
-    v2.reserve(1000);
+    v.reserve(10000);
+    v2.reserve(10000);
   } else {
     v.reserve(1000);
     v2.reserve(1000);
