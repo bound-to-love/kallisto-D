@@ -199,7 +199,7 @@ int64_t ProcessReads(MasterProcessor& MP, const  ProgramOptions& opt) {
     std::cerr << std::endl;
   }
 
-
+  std::cerr << "which function is being called? This is ProcessReads" << std::endl; std::cerr.flush();
   MP.processReads();
   numreads = MP.numreads;
   nummapped = MP.nummapped;
@@ -264,7 +264,9 @@ int64_t ProcessBUSReads(MasterProcessor& MP, const  ProgramOptions& opt) {
 
   // for each file
   std::cerr << "[quant] finding pseudoalignments for the reads ..."; std::cerr.flush();
-
+  
+  std::cerr << "which function is being called? This is ProcessBUSReads" << std::endl; std::cerr.flush();
+	
   MP.processReads();
   numreads = MP.numreads;
   nummapped = MP.nummapped;
