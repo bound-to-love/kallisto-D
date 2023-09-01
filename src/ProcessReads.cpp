@@ -298,11 +298,13 @@ void MasterProcessor::processReads() {
     std::vector<std::thread> workers;
     for (int i = 0; i < opt.threads; i++) {
       workers.emplace_back(std::thread(ReadProcessor(index,opt,tc,*this,-1,i)));
+      std::cerr << "isn't reaching here? emplacing threads i = " << i << std::endl; std::cerr.flush(); 
     }
 
     // let the workers do their thing
     for (int i = 0; i < opt.threads; i++) {
       workers[i].join(); //wait for them to finish
+      std::cerr << "isn't reaching here? Joining threads i = " << i << std::endl; std::cerr.flush(); 
     }
 
     // now handle the modification of the mincollector
@@ -334,17 +336,19 @@ void MasterProcessor::processReads() {
         fSR.files.erase(fSR.files.begin()+opt.busOptions.nfiles, fSR.files.end());
         assert(fSR.files.size() == opt.busOptions.nfiles);
         FSRs.push_back(std::move(fSR));
+        std::cerr << "processReads() batch = " << i << std::endl; std::cerr.flush();
       }
     }
 
     for (int i = 0; i < opt.threads; i++) {
       workers.emplace_back(std::thread(BUSProcessor(index,opt,tc,*this,-1,i)));
+      std::cerr << "processReads() emplace back workers i = " << i << std::endl; std::cerr.flush();
     }
 
     // let the workers do their thing
     for (int i = 0; i < opt.threads; i++) {
       workers[i].join(); //wait for them to finish
-      std::cerr << "Joining threads i = " << i << std::endl; std::cerr.flush(); 
+      std::cerr << "isn't reaching here? Joining threads i = " << i << std::endl; std::cerr.flush(); 
     }
 
     // now handle the modification of the mincollector
