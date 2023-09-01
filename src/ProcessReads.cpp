@@ -375,6 +375,7 @@ void MasterProcessor::processReads() {
       auto num_threads = opt.threads;
       
       for (int i = 0; i < nt; i++) {
+        std::cerr << "processReads() thread or id? = " << i << std::endl; std::cerr.flush();
         FastqSequenceReader batchSR;
         batchSR.files = opt.batch_files[id+i];
         batchSR.nfiles = opt.batch_files[id+i].size();
@@ -384,25 +385,30 @@ void MasterProcessor::processReads() {
       }
       
       for (int i = 0; i < nt; i++,id++,local_id++) {
+        std::cerr << "processReads() workers emprace i = " << i << std::endl; std::cerr.flush();
         workers.emplace_back(std::thread(BUSProcessor(index, opt, tc, *this, id,local_id)));
       }
       for (int i = 0; i < num_threads-nt; i++,local_id++) { // Use up remaining threads
+        std::cerr << "processReads() using up threads emplace back = " << i << std::endl; std::cerr.flush();
         workers.emplace_back(std::thread(BUSProcessor(index, opt, tc, *this, start_id + (i % nt),local_id))); // id will cycle
       }
       // let the workers do their thing
       for (int i = 0; i < workers.size(); i++) {
+        std::cerr << "processReads() joining i = " << i << std::endl; std::cerr.flush();
         workers[i].join(); //wait for them to finish
       }
       FSRs.clear(); // clear the sequence readers
     }
 
     // now handle the modification of the mincollector
+    std::cerr << "processReads() updating min collector " << std::endl; std::cerr.flush();
     for (auto &x : bus_ecmapinv) {
       auto &u = x.first;
       int ec = x.second;
       index.ecmapinv.insert({u,ec});
     }
     tc.counts.resize(index.ecmapinv.size(), 0);
+    std::cerr << "processReads() finished updating min collector " << std::endl; std::cerr.flush();
   }
 
   if (opt.pseudobam) {
