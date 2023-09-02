@@ -1491,7 +1491,9 @@ void BUSProcessor::processBuffer() {
   memset(buffer, 0, 100);
   char *umi = &(buffer[50]);
   char *bc  = &(buffer[0]);
-  char *seqbuffer[1000];
+  //char *seqbuffer[1000];
+  std::string seqbuffer; 
+  seqbuffer.reserve(1000); 
 
   // actually process the sequence
 
