@@ -1619,6 +1619,7 @@ void BUSProcessor::processBuffer() {
         doStrandSpecificityIfPossible = true;
       }
     } else {
+      std::cerr << "IS seqbuffer used by long read?" << std::endl; std::cerr.flush(); 
       seqbuffer.clear();
       for (int j = 0; j < busopt.seq.size(); j++) {
         const auto &sopt = busopt.seq[j];
