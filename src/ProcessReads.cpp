@@ -1434,13 +1434,9 @@ void BUSProcessor::processBuffer() {
   std::vector<std::pair<const_UnitigMap<Node>, int>> v, v2;
   Roaring vtmp, u;
 
-  if (mp.opt.long_read){
-    v.reserve(10000);
-    v2.reserve(10000);
-  } else {
-    v.reserve(1000);
-    v2.reserve(1000);
-  }
+  v.reserve(1000);
+  v2.reserve(1000);
+  
 
   memset(&bc_len[0], 0, sizeof(bc_len));
   memset(&umi_len[0], 0, sizeof(umi_len));
@@ -1495,13 +1491,7 @@ void BUSProcessor::processBuffer() {
   memset(buffer, 0, 100);
   char *umi = &(buffer[50]);
   char *bc  = &(buffer[0]);
-  //char *seqbuffer[1000];
-  std::string seqbuffer;
-  if (busopt.long_read) {
-    seqbuffer.reserve(15000);
-  } else {
-    seqbuffer.reserve(1000);
-  }
+  char *seqbuffer[1000];
 
   // actually process the sequence
 
