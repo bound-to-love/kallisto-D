@@ -1607,12 +1607,11 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 	      proc = l; //this is checking if jump logic works how I am suspecting it is working 
             } 
           }
+        } else {
+          // the sequence is messed up at this point, let's just take the match
+          //v.push_back({dbGraph.ecs[val.contig], l-k});
+          break;
         }
-      }  
-      else {
-        // the sequence is messed up at this point, let's just take the match
-        //v.push_back({dbGraph.ecs[val.contig], l-k});
-        break;
       }
     }
     proc+=um.len; 
