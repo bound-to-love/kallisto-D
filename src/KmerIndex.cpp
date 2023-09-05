@@ -1500,7 +1500,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         // check next position
         //KmerIterator kit2(kit);
         //kit2 += nextPos-pos;
-        if (nextPos < l) {
+        if (nextPos < l-k) {
           const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); //const_UnitigMap<Node> um2 = dbg.find(kit2->first);
           bool found2 = false;
           int  found2pos = pos+dist;
