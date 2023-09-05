@@ -1604,7 +1604,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                   }
                 }
               }
-	      proc = l; //this is checking if jump logic works how I am suspecting it is working 
+	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
             } 
           }
         } //NOTE!!! When this if is outside of the check if nextPos is at the end of the kmer, then we allow for incrementally searching which is the correct behavior? 
