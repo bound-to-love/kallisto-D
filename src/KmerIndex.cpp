@@ -1447,7 +1447,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   //Refactoring for exact match with jumping logic 
   Roaring rtmp;
   size_t proc = 0;
-  while (proc < l - k + 2) {
+  while (proc < l - k + 1) { //should be + 2?
     const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
     if (um.len == 0) {
       proc++;
@@ -1492,15 +1492,15 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         // where should we jump to?
         int nextPos = pos+dist; // default jump
 
-        if (pos + dist >= l-k+1) {
+        if (pos + dist >= l-k) { //should be + 1?
           // if we can jump beyond the read, check the end
-          nextPos = l-k+1;
+          nextPos = l-k; //should be +1?
         }
 
         // check next position
         //KmerIterator kit2(kit);
         //kit2 += nextPos-pos;
-        if (nextPos < l-k+1) {
+        if (nextPos < l-k) { //should be +1?
           const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); //const_UnitigMap<Node> um2 = dbg.find(kit2->first);
           bool found2 = false;
           int  found2pos = pos+dist;
@@ -1515,8 +1515,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
           }
           if (found2) {
             // great, a match (or nothing) see if we can move the k-mer forward
-            if (found2pos >= l-k+1) {
-              v.push_back({um, l-k+1}); // push back a fake position
+            if (found2pos >= l-k) { //should be +1?
+              v.push_back({um, l-k}); // push back a fake position //should be +2?
               break; //
             } else {
               v.push_back({um, found2pos});
@@ -1563,7 +1563,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                     }
                   }
                   v.push_back({um3, found3pos});
-                  if (nextPos >= l-k+1) {
+                  if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
                     proc=found2pos;//kit = kit2;
@@ -1604,15 +1604,15 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                   }
                 }
               }
-	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
+	      proc = l; //this is checking if jump logic works how I am suspecting it is working 
             } 
           }
-        } //NOTE!!! When this if is outside of the check if nextPos is at the end of the kmer, then we allow for incrementally searching which is the correct behavior? 
-	else {
-          // the sequence is messed up at this point, let's just take the match
-          //v.push_back({dbGraph.ecs[val.contig], l-k});
-          break;
         }
+      }//NOTE!!! When this if is outside of the check if nextPos is at the end of the kmer, then we allow for incrementally searching which is the correct behavior? 
+      else {
+        // the sequence is messed up at this point, let's just take the match
+        //v.push_back({dbGraph.ecs[val.contig], l-k});
+        break;
       }
       proc+=um.len;
     } else {
