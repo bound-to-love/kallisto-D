@@ -1524,7 +1524,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
             if (dist > 4) {
               int middlePos = (pos + nextPos)/2;
               int middleContig = -1;
-              int found3pos = pos+dist;
+              int found3pos = middlePos+dist;
               //KmerIterator kit3(kit);
               //kit3 += middlePos-pos;
 
