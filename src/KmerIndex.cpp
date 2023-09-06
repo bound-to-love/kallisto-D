@@ -1524,7 +1524,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
             if (dist > 4) {
               int middlePos = (pos + nextPos)/2;
               int middleContig = -1;
-              int found3pos = middlePos+dist;
+              int found3pos = middlePos+dist; //formerly pos+dist which is same as found2pos, but I think should be middlePos+dist
               //KmerIterator kit3(kit);
               //kit3 += middlePos-pos;
 
@@ -1539,8 +1539,6 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                              um2.getData()->ec[um2.dist] == um3.getData()->ec[um3.dist]) {
                     foundMiddle = true;
                     found3pos = pos+dist;
-                    //proc=found3pos;
-		    pos = proc; 
                   }
                 }
 
@@ -1559,11 +1557,10 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                     }
                   }
                   v.push_back({um3, found3pos});
-                  if (nextPos >= l-k-1) { //should be +2?
+                  if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
-                    proc=found2pos;//kit = kit2;
-		    pos=proc; 
+                    proc=found2pos;//kit = kit2;=
                   }
                 }
               }
@@ -1571,10 +1568,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 
             if (!foundMiddle) {
               ++proc; //++kit;
-	      pos=proc; 
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
-              for (int j = 0; proc < nextPos; ++proc,++j) {
-		pos=proc; 
+              for (int j = 0; proc <= nextPos; ++proc,++j) {
                 if (j==skip) {
                   j=0;
                 }
@@ -1611,8 +1606,6 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         break;
       }	
     } //adding this corresponding to NOTE!!!
-      proc+=um.len;
-    } else {
       proc++; 
     }
   }/*** else {
