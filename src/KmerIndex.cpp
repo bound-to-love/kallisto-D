@@ -1618,6 +1618,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     } else {
       proc++; 
     }
+  } else {
+    proc++;
   }
   
 
