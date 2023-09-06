@@ -1516,7 +1516,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
               break; //
             } else {
               v.push_back({um, found2pos});
-              //proc=found2pos;//kit = kit2; // move iterator to this new position
+              proc=found2pos;//kit = kit2; // move iterator to this new position
             }
           } else {
             // this is weird, let's try the middle k-mer
@@ -1560,7 +1560,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                   if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
-                    proc=found2pos;//kit = kit2;=
+                    proc=found2pos;//kit = kit2;
                   }
                 }
               }
