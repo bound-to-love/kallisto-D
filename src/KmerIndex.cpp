@@ -1500,7 +1500,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         // check next position
         //KmerIterator kit2(kit);
         //kit2 += nextPos-pos;
-        if (nextPos < l-k) { //should be +1?
+        if (nextPos < l-k-1) { //should be +1?
           const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); //const_UnitigMap<Node> um2 = dbg.find(kit2->first);
           bool found2 = false;
           int  found2pos = pos+dist;
@@ -1515,8 +1515,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
           }
           if (found2) {
             // great, a match (or nothing) see if we can move the k-mer forward
-            if (found2pos >= l-k) { //should be +1?
-              v.push_back({um, l-k}); // push back a fake position //should be +2?
+            if (found2pos >= l-k-1) { //should be +1?
+              v.push_back({um, l-k-1}); // push back a fake position //should be +2?
               break; //
             } else {
               v.push_back({um, found2pos});
@@ -1532,7 +1532,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
               //KmerIterator kit3(kit);
               //kit3 += middlePos-pos;
 
-              if (found3pos < l-k+1) {
+              if (found3pos < l-k-1) {
                 const_UnitigMap<Node> um3 = dbg.findUnitig(s, middlePos, l); //const_UnitigMap<Node> um3 = dbg.find(kit3->first);
                 if (!um3.isEmpty) {
                   if (um.isSameReferenceUnitig(um3) &&
@@ -1563,7 +1563,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
                     }
                   }
                   v.push_back({um3, found3pos});
-                  if (nextPos >= l-k) { //should be +2?
+                  if (nextPos >= l-k-1) { //should be +2?
                     break;
                   } else {
                     proc=found2pos;//kit = kit2;
