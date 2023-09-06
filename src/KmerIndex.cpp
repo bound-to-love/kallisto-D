@@ -1606,9 +1606,13 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
         break;
       }	
     } //adding this corresponding to NOTE!!!
-      proc++; 
-    }
-  }/*** else {
+  }
+  if (um.len == 0) { 
+    proc++;
+  } else {
+    proc+=um.len; 
+  }
+}/*** else {
     proc++;
   }***/
   
