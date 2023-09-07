@@ -1733,7 +1733,8 @@ KmerIterator kit(s), kit_end;
                   if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
-                    proc=found2pos;//kit = kit2;
+                    proc=found2pos;
+		    kit = kit2;
                   }
                 }
               }
@@ -1771,7 +1772,7 @@ KmerIterator kit(s), kit_end;
                 }
 		++kit; 
               }
-	      kit += (l-k)-nextPos; 
+	      //kit += (l-k)-nextPos;
 	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
             } 
           }
