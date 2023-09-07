@@ -1688,7 +1688,8 @@ KmerIterator kit(s), kit_end;
               break; //
             } else {
               v.push_back({um, found2pos});
-              proc=found2pos;//kit = kit2; // move iterator to this new position
+              proc=found2pos;
+	      kit = kit2; // move iterator to this new position
             }
           } else {
             // this is weird, let's try the middle k-mer
@@ -1696,7 +1697,7 @@ KmerIterator kit(s), kit_end;
             if (dist > 4) {
               int middlePos = (pos + nextPos)/2;
               int middleContig = -1;
-              int found3pos = middlePos+dist; //formerly pos+dist which is same as found2pos, but I think should be middlePos+dist
+              int found3pos = pos + dist; //middlePos+dist; //formerly pos+dist which is same as found2pos, but I think should be middlePos+dist
               KmerIterator kit3(kit);
               kit3 += middlePos-pos;
 
@@ -1744,7 +1745,7 @@ KmerIterator kit(s), kit_end;
               ++proc; 
 	      ++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
-              for (int j = 0; proc <= nextPos; ++proc,++j) {
+              for (int j = 0; proc < nextPos; ++proc,++j) {
                 if (j==skip) {
                   j=0;
                 }
