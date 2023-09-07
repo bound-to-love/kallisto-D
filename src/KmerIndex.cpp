@@ -1618,8 +1618,8 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 
 Roaring rtmp;
 KmerIterator kit(s), kit_end;
-  size_t proc = 0;
-  while (kit != kit_end) { //should be + 2?
+size_t proc = 0;
+while (kit != kit_end) { //should be + 2?
     const_UnitigMap<Node> um = dbg.find(kit->first);//dbg.findUnitig(s, proc, l);     
 
     n = um.getData();
@@ -1788,14 +1788,9 @@ KmerIterator kit(s), kit_end;
         break;
       }	
     }  //adding this corresponding to NOTE!!!
-      else {
-      kit++; 
-      proc++; 
-    }
-  } else {
-    kit++; 
-    proc++; 
-  }
+  } 
+  kit++; 
+  proc++; 
 	  
   /***
   if (um.len == 0) { 
