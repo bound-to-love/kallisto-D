@@ -1787,7 +1787,11 @@ KmerIterator kit(s), kit_end;
         //v.push_back({dbGraph.ecs[val.contig], l-k});
         break;
       }	
-    } //adding this corresponding to NOTE!!!
+    }  //adding this corresponding to NOTE!!!
+      else {
+      kit++; 
+      proc++; 
+    }
   } else {
     kit++; 
     proc++; 
