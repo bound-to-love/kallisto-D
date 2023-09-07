@@ -1744,7 +1744,6 @@ KmerIterator kit(s), kit_end;
 	      ++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
               for (int j = 0; proc <= nextPos; ++proc,++j) {
-		++kit; 
                 if (j==skip) {
                   j=0;
                 }
@@ -1770,6 +1769,7 @@ KmerIterator kit(s), kit_end;
                     v.push_back({um4, proc}); // add equivalence class, and position
                   }
                 }
+		++kit; 
               }
 	      kit += (l-k)-nextPos; 
 	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
@@ -1788,7 +1788,8 @@ KmerIterator kit(s), kit_end;
     kit++; 
     proc++;
   } else {
-    continue; 
+    kit++; 
+    proc++; 
     //proc+=um.len; 
   }
 }
