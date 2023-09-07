@@ -1745,7 +1745,7 @@ while (kit != kit_end) { //should be + 2?
               ++proc; 
 	      ++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
-              for (int j = 0; kit != kit_end; ++proc,++j) {
+              for (int j = 0; kit != kit_end; ++kit,++j) {
                 if (j==skip) {
                   j=0;
                 }
@@ -1774,7 +1774,7 @@ while (kit != kit_end) { //should be + 2?
 		if (kit->second >= nextPos) {
 		  break; 
 		}
-		++kit; 
+		++proc; 
               }
 	      //kit += (l-k)-nextPos;
 	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
