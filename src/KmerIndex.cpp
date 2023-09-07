@@ -1788,7 +1788,12 @@ KmerIterator kit(s), kit_end;
         break;
       }	
     } //adding this corresponding to NOTE!!!
+  } else {
+    kit++; 
+    proc++; 
   }
+	  
+  /***
   if (um.len == 0) { 
     kit++; 
     proc++;
@@ -1796,7 +1801,7 @@ KmerIterator kit(s), kit_end;
     kit++; 
     proc++; 
     //proc+=um.len; 
-  }
+  }***/
 }
 /*** else {
     proc++;
