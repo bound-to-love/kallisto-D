@@ -1641,7 +1641,7 @@ KmerIterator kit(s), kit_end;
         }
       }
 
-      v.push_back({um, pos});
+      v.push_back({um, kit->second});
 
       // Find start and end of O.G. kallisto contig w.r.t. the bifrost-kallisto
       // unitig
@@ -1745,7 +1745,7 @@ KmerIterator kit(s), kit_end;
               ++proc; 
 	      ++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
-              for (int j = 0; proc < nextPos; ++proc,++j) {
+              for (int j = 0; kit != kit_end; ++proc,++j) {
                 if (j==skip) {
                   j=0;
                 }
@@ -1771,6 +1771,9 @@ KmerIterator kit(s), kit_end;
                     v.push_back({um4, proc}); // add equivalence class, and position
                   }
                 }
+		if (kit->second >= nextPos) {
+		  break; 
+		}
 		++kit; 
               }
 	      //kit += (l-k)-nextPos;
