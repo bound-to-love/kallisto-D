@@ -617,11 +617,12 @@ void ParseOptionsBus(int argc, char **argv, ProgramOptions& opt) {
 
   if (paired_end_flag) {
     opt.single_end = false;
-    opt.long_read = false;
-  } else if (long_read_flag) {
-    opt.long_read = true; 
   } else {
     opt.single_end = true;
+  }
+
+  if (long_read_flag) {
+    opt.long_read = true; 
   }
   
   if (interleaved_flag) {
@@ -903,7 +904,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
         cerr << "[bus] will try running read files as-is in bulk mode" << endl;
       }
       opt.batch_mode = true;
-      if (!opt.single_end && !opt.long_read && opt.files.size() % 2 != 0 && opt.input_interleaved_nfiles == 0) {
+      if (!opt.single_end && opt.files.size() % 2 != 0 && opt.input_interleaved_nfiles == 0) {
         cerr << "Error: paired-end mode requires an even number of input files" << endl;
         ret = false;
       } else {
