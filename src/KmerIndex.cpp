@@ -1773,7 +1773,9 @@ while (kit != kit_end) { //should be + 2?
                   }
                 }
 		if (kit->second >= nextPos) {
-		  break; 
+		  continue;
+		  //trying out the not breaking case to do a complete incremental search until kit_end
+		  //break; 
 		}
 		++proc; 
               }
