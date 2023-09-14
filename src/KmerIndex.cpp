@@ -1619,7 +1619,8 @@ Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
 while (kit != kit_end) { //should be + 2?
-    const_UnitigMap<Node> um = dbg.find(kit->first);//dbg.findUnitig(s, proc, l);     
+    //const_UnitigMap<Node> um = dbg.find(kit->first);
+    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);     
 
     n = um.getData();
 
@@ -1668,7 +1669,8 @@ while (kit != kit_end) { //should be + 2?
         KmerIterator kit2(kit);
         kit2 += nextPos-pos;
         if (kit2 != kit_end) { //(nextPos < l-k) { //should be +1?
-          const_UnitigMap<Node> um2 = dbg.find(kit2->first); //const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); 
+          //const_UnitigMap<Node> um2 = dbg.find(kit2->first); 
+	  const_UnitigMap<Node> um2 = dbg.findUnitig(s, nextPos, l); 
           bool found2 = false;
           int  found2pos = pos+dist;
           if (um2.isEmpty) {
@@ -1701,8 +1703,8 @@ while (kit != kit_end) { //should be + 2?
               kit3 += middlePos-pos;
 
               if (kit3 != kit_end) { //(found3pos < l-k) {
-                const_UnitigMap<Node> um3 = dbg.find(kit3->first); 
-		//const_UnitigMap<Node> um3 = dbg.findUnitig(s, middlePos, l); 
+                //const_UnitigMap<Node> um3 = dbg.find(kit3->first); 
+		const_UnitigMap<Node> um3 = dbg.findUnitig(s, middlePos, l); 
 		if (!um3.isEmpty) {
                   if (um.isSameReferenceUnitig(um3) &&
                       n->ec[um.dist] == um3.getData()->ec[um3.dist]) {
@@ -1750,8 +1752,8 @@ while (kit != kit_end) { //should be + 2?
                 }
                 if (j==0) {
                   // need to check it
-		  const_UnitigMap<Node> um4 = dbg.find(kit->first);
-                  //const_UnitigMap<Node> um4 = dbg.findUnitig(s, proc, l);;
+		  //const_UnitigMap<Node> um4 = dbg.find(kit->first);
+                  const_UnitigMap<Node> um4 = dbg.findUnitig(s, proc, l);;
                   if (!um4.isEmpty) {
                     // if k-mer found
                     if (partial) {
