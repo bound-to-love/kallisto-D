@@ -1383,7 +1383,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
   }
 
   //Below is initial refactoring of match that needs to be adapted to exactly match prior implementation 
-  
+  /***
   size_t proc = 0;
   while (proc < l - k) {
     const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);
@@ -1442,7 +1442,7 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
     //std::cout << "proc: " << proc << std::endl; 
     proc++; //= um.len;
   }
-  
+  ***/
 
   //Refactoring for exact match with jumping logic with proc instead of kmer iterator 
   /***
@@ -1617,7 +1617,6 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 ***/
 
 //THIS IS THE REFACTORED AND EDITED VERSION THAT PERFORMS WELL FOR PACBIO READS BUT IS SUBPAR FOR ONT STILL 
-/***
 Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
@@ -1692,8 +1691,9 @@ while (kit != kit_end) { //should be + 2?
               break; //
             } else {
               v.push_back({um, found2pos});
-              proc=found2pos;
-	      kit = kit2; // move iterator to this new position
+	      //trying incremental search
+	      //proc=found2pos;
+	      //kit = kit2; // move iterator to this new position
             }
           } else {
             // this is weird, let's try the middle k-mer
@@ -1738,8 +1738,9 @@ while (kit != kit_end) { //should be + 2?
                   if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
-                    proc=found2pos;
-		    kit = kit2;
+		    //trying incremental search
+                    //proc=found2pos;
+		    //kit = kit2;
                   }
                 }
               }
@@ -1798,7 +1799,6 @@ while (kit != kit_end) { //should be + 2?
   kit++; 
   proc++; 
 }
-***/
 
 //Refactored for exact match with jumping logic with kmer iterator
 /***
