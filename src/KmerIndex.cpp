@@ -1692,8 +1692,8 @@ while (kit != kit_end) { //should be + 2?
             } else {
               v.push_back({um, found2pos});
 	      //trying incremental search
-	      //proc=found2pos;
-	      //kit = kit2; // move iterator to this new position
+	     				proc=found2pos;
+	     				kit = kit2; // move iterator to this new position
             }
           } else {
             // this is weird, let's try the middle k-mer
@@ -1739,8 +1739,8 @@ while (kit != kit_end) { //should be + 2?
                     break;
                   } else {
 		    //trying incremental search
-                    //proc=found2pos;
-		    //kit = kit2;
+                    proc=found2pos;
+		    						 kit = kit2;
                   }
                 }
               }
@@ -1748,7 +1748,7 @@ while (kit != kit_end) { //should be + 2?
 
             if (!foundMiddle) {
               ++proc; 
-	      ++kit;
+	     				++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
               for (int j = 0; kit != kit_end; ++kit,++j) {
                 if (j==skip) {
