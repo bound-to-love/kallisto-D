@@ -2360,8 +2360,7 @@ int main(int argc, char *argv[]) {
       }
       if (num_pseudoaligned == 0) {
         exit(1); // exit with error
-      }
-    } 
+      } 
     } else if (cmd == "merge") {
         cerr << "Deprecated: `kallisto merge` is deprecated. See `kallisto bus`." << endl;
     } else if (cmd == "quant") {
