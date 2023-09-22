@@ -2131,6 +2131,7 @@ int main(int argc, char *argv[]) {
         InspectIndex(index,opt);
       }
     } else if (cmd == "bus") {
+      std::cerr << "Is bus being called?" << std::endl; std::cerr.flush();
       if (argc ==2) {
         usageBus();
         return 0;
@@ -2159,6 +2160,7 @@ int main(int argc, char *argv[]) {
       
       KmerIndex index(opt);
       index.load(opt);
+      std::cerr << "Is index being loaded?" << std::endl; std::cerr.flush();
       
       bool guessChromosomes = true;
       Transcriptome model; // empty
