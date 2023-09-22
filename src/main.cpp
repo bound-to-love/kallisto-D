@@ -1047,7 +1047,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
       busopt.bc.resize(0);
       busopt.aa = opt.aa;
       busopt.keep_fastq_comments = false;
-      if (opt.single_end || opt.long_read) {
+      if (opt.single_end) {
         busopt.nfiles = 1;
         busopt.paired = false;
       } else {
@@ -1238,7 +1238,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
       //bool invalid = ParseTechnology(opt.technology, values, files, errorList, bcValues);
       bool valid = ParseTechnology(opt.technology, busopt, errorList);
       
-      if (busopt.seq.size() == 2 && !opt.single_end && !opt.long_read) {
+      if (busopt.seq.size() == 2 && !opt.single_end) {
         busopt.paired = true;
       }
       
@@ -1296,7 +1296,7 @@ bool CheckOptionsBus(ProgramOptions& opt) {
     }
   }
 
-  if (!opt.single_end && !opt.long_read && !opt.busOptions.paired) {
+  if (!opt.single_end && !opt.busOptions.paired) {
       cerr << "Error: Paired reads are not compatible with the specified technology" << endl;
       ret = false;
   }
