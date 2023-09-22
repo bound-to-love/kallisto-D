@@ -2131,7 +2131,6 @@ int main(int argc, char *argv[]) {
         InspectIndex(index,opt);
       }
     } else if (cmd == "bus") {
-      std::cerr << "Is bus being called?" << std::endl; std::cerr.flush();
       if (argc ==2) {
         usageBus();
         return 0;
@@ -2160,7 +2159,6 @@ int main(int argc, char *argv[]) {
       
       KmerIndex index(opt);
       index.load(opt);
-      std::cerr << "Is index being loaded?" << std::endl; std::cerr.flush();
       
       bool guessChromosomes = true;
       Transcriptome model; // empty
@@ -2176,13 +2174,9 @@ int main(int argc, char *argv[]) {
         model.parseGTF(opt.gtfFile, index, opt, guessChromosomes);
       }
 
-      std::cerr << "Making collection next " << std::endl; std::cerr.flush(); 
       MinCollector collection(index, opt);
-      std::cerr << "Made collection " << std::endl; std::cerr.flush(); 
       MasterProcessor MP(index, opt, collection, model);
-      std::cerr << "Made MP " << std::endl; std::cerr.flush(); 
       if (batch_mode) {	      
-	std::cerr << "Is ProcessBatchReads being called?" << std::endl; std::cerr.flush();
         num_processed = ProcessBatchReads(MP, opt);
         writeCellIds(cellnamesfilename, opt.batch_ids);
         // Write out fake barcodes that identify each cell
@@ -2229,7 +2223,6 @@ int main(int argc, char *argv[]) {
           }
 	}
       } else {
-	std::cerr << "Is ProcessBUSReads being called?" << std::endl; std::cerr.flush(); 
         num_processed = ProcessBUSReads(MP, opt);
         for (int i = 0; i <= 32; i++) {
           if (MP.bus_bc_len[i] > MP.bus_bc_len[bclen]) {
