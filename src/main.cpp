@@ -207,7 +207,7 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
     {"plaintext", no_argument, &plaintext_flag, 1},
     {"write-index", no_argument, &write_index_flag, 1},
     {"single", no_argument, &single_flag, 1},
-    {"long", no_argument, &long_read_flag, 0}, 
+    {"long", no_argument, &long_read_flag, 1}, 
     {"single-overhang", no_argument, &single_overhang_flag, 1},
     {"fr-stranded", no_argument, &strand_FR_flag, 1},
     {"rf-stranded", no_argument, &strand_RF_flag, 1},
@@ -2176,7 +2176,8 @@ int main(int argc, char *argv[]) {
       
       MinCollector collection(index, opt);
       MasterProcessor MP(index, opt, collection, model);
-      if (batch_mode) {
+      if (batch_mode) {	      
+	std::cerr << "Is ProcessBatchReads being called?" << std::endl; std::cerr.flush();
         num_processed = ProcessBatchReads(MP, opt);
         writeCellIds(cellnamesfilename, opt.batch_ids);
         // Write out fake barcodes that identify each cell
@@ -2192,7 +2193,7 @@ int main(int argc, char *argv[]) {
           index.write((opt.output + "/index.saved"), false, opt.threads);
         }
         // Write out fragment length distributions if reads paired-end or long:
-        if (!opt.single_end) {
+        if (!opt.single_end || opt.long_read) {
           std::ofstream flensout_f((opt.output + "/flens.txt"));
           for (size_t id = 0; id < opt.batch_ids.size(); id++) {
       	    if (opt.long_read) {
@@ -2222,6 +2223,7 @@ int main(int argc, char *argv[]) {
 	    flensout_f.close();
         }
       } else {
+	std::cerr << "Is ProcessBUSReads being called?" << std::endl; std::cerr.flush(); 
         num_processed = ProcessBUSReads(MP, opt);
         for (int i = 0; i <= 32; i++) {
           if (MP.bus_bc_len[i] > MP.bus_bc_len[bclen]) {
@@ -2262,7 +2264,7 @@ int main(int argc, char *argv[]) {
         }
         std::vector<uint32_t> fld; 
         std::vector<uint32_t> fld_c;
-        if (opt.busOptions.paired) {
+        if (opt.busOptions.paired && !opt.busOptions.long_read) {
           fld = collection.flens; // copy
           collection.compute_mean_frag_lens_trunc();
           // Write out index:
