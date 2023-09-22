@@ -2175,8 +2175,10 @@ int main(int argc, char *argv[]) {
       if (!opt.gtfFile.empty()) {
         model.parseGTF(opt.gtfFile, index, opt, guessChromosomes);
       }
-      
+
+      std::cerr << "Making collection next " << std::endl; std::cerr.flush(); 
       MinCollector collection(index, opt);
+      std::cerr << "Made collection " << std::endl; std::cerr.flush(); 
       MasterProcessor MP(index, opt, collection, model);
       std::cerr << "Made MP " << std::endl; std::cerr.flush(); 
       if (batch_mode) {	      
