@@ -2178,6 +2178,7 @@ int main(int argc, char *argv[]) {
       
       MinCollector collection(index, opt);
       MasterProcessor MP(index, opt, collection, model);
+      std::cerr << "Made MP " << std::endl; std::cerr.flush(); 
       if (batch_mode) {	      
 	std::cerr << "Is ProcessBatchReads being called?" << std::endl; std::cerr.flush();
         num_processed = ProcessBatchReads(MP, opt);
