@@ -207,7 +207,7 @@ void ParseOptionsEM(int argc, char **argv, ProgramOptions& opt) {
     {"plaintext", no_argument, &plaintext_flag, 1},
     {"write-index", no_argument, &write_index_flag, 1},
     {"single", no_argument, &single_flag, 1},
-    {"long", no_argument, &long_read_flag, 1}, 
+    {"long", no_argument, &long_read_flag, 0}, 
     {"single-overhang", no_argument, &single_overhang_flag, 1},
     {"fr-stranded", no_argument, &strand_FR_flag, 1},
     {"rf-stranded", no_argument, &strand_RF_flag, 1},
