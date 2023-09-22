@@ -2223,7 +2223,8 @@ int main(int argc, char *argv[]) {
             	flensout_f << "\n";
      	      }     
 	    flensout_f.close();
-        }
+          }
+	}
       } else {
 	std::cerr << "Is ProcessBUSReads being called?" << std::endl; std::cerr.flush(); 
         num_processed = ProcessBUSReads(MP, opt);
