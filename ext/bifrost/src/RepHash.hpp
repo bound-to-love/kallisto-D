@@ -6,7 +6,7 @@
 
 #include "wyhash.h"
 
-static const unsigned char twin[32] = {
+static const unsigned char twin[64] = {
     0, 20, 2, 7, 4, 5, 6, 3,
     8,  9, 10, 11, 12, 13, 14, 15,
     16, 17, 18, 19, 1, 21, 22, 23,
