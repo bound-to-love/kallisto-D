@@ -19,7 +19,7 @@ ExternalProject_Get_Property(bifrost install_dir)
 if (USE_BAM)
 target_link_libraries(kallisto kallisto_core pthread ${CMAKE_CURRENT_SOURCE_DIR}/../ext/htslib/libhts.a ${install_dir}/build/src/libbifrost.a)
 else()
-target_link_libraries(kallisto kallisto_core pthread ${install_dir}/build/src/libbifrost.a)
+target_link_libraries(kallisto kallisto_core pthread ${install_dir}/build/src/libbifrost.a -DMAX_KMER_SIZE=64)
 endif(USE_BAM)
 
 if(LINK MATCHES static)
