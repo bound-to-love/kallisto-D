@@ -175,7 +175,8 @@ std::string generate_tmp_file(std::string seed) {
   std::string tmp_file = ".kallisto.";
   srand((unsigned int)std::hash<std::string>{}(seed));
   int pos;
-  while(tmp_file.length() < 32) {
+//is this impacted by kmer max size 
+  while(tmp_file.length() < 64) {
     pos = ((rand() % (base.size() - 1)));
     tmp_file += base.substr(pos, 1);
   }
