@@ -1627,7 +1627,7 @@ while (kit != kit_end) { //should be + 2?
     	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
 	if (!fum.isEmpty) {
 		v.push_back({fum, proc});
-    		proc += fum.len+1;
+    		proc += 15; //fum.len + 1
 	} else {
 		proc++;
 	}
