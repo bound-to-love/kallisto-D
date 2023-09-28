@@ -1622,9 +1622,11 @@ Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
 while (kit != kit_end) { //should be + 2?
-    const_UnitigMap<Node> um = dbg.find(kit->first);
-    //const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);     
+    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);  
+    v.push_back({um, proc});
 
+    const_UnitigMap<Node> um = dbg.find(kit->first);
+	
     n = um.getData();
 
     int pos = kit->second;
@@ -1693,8 +1695,8 @@ while (kit != kit_end) { //should be + 2?
             } else {
               v.push_back({um, found2pos});
 	      //trying incremental search
-	     				proc=found2pos;
-	     				kit = kit2; // move iterator to this new position
+	      proc=found2pos;
+	      kit = kit2; // move iterator to this new position
             }
           } else {
             // this is weird, let's try the middle k-mer
@@ -1741,7 +1743,7 @@ while (kit != kit_end) { //should be + 2?
                   } else {
 		    //trying incremental search
                     proc=found2pos;
-		    						 kit = kit2;
+		    kit = kit2;
                   }
                 }
               }
