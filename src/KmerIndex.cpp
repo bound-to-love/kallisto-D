@@ -1622,9 +1622,11 @@ Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
 while (kit != kit_end) { //should be + 2?
-    const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
-    v.push_back({fum, proc});
-    proc += fum.len; 
+    if (proc < l - k) {
+    	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
+    	v.push_back({fum, proc});
+    	proc += fum.len; 
+    }
 
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
