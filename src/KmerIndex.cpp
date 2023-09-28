@@ -1622,8 +1622,9 @@ Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
 while (kit != kit_end) { //should be + 2?
-    const_UnitigMap<Node> um = dbg.findUnitig(s, proc, l);  
-    v.push_back({um, proc});
+    const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
+    v.push_back({fum, proc});
+    proc += fum.len; 
 
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
@@ -1742,7 +1743,7 @@ while (kit != kit_end) { //should be + 2?
                     break;
                   } else {
 		    //trying incremental search
-                    proc=found2pos;
+                    //proc=found2pos;
 		    kit = kit2;
                   }
                 }
@@ -1750,8 +1751,8 @@ while (kit != kit_end) { //should be + 2?
             }
 
             if (!foundMiddle) {
-              ++proc; 
-	     				++kit;
+              //++proc; 
+	      ++kit;
               // backup plan, let's play it safe and search incrementally for the rest, until nextStop
               for (int j = 0; kit != kit_end; ++kit,++j) {
                 if (j==skip) {
@@ -1776,7 +1777,7 @@ while (kit != kit_end) { //should be + 2?
                         }
                       }    
                     }
-                    v.push_back({um4, proc}); // add equivalence class, and position
+                    v.push_back({um4, kit->second}); // add equivalence class, and position
                   }
                 }
 		if (kit->second >= nextPos) {
@@ -1784,7 +1785,7 @@ while (kit != kit_end) { //should be + 2?
 		  //trying out the not breaking case to do a complete incremental search until kit_end
 		  break; 
 		}
-		++proc; 
+		//++proc; 
               }
 	      //kit += (l-k)-nextPos;
 	      //proc = l; //this is checking if jump logic works how I am suspecting it is working 
@@ -1800,7 +1801,7 @@ while (kit != kit_end) { //should be + 2?
     //}  //adding this corresponding to NOTE!!!
   } 
   kit++; 
-  proc++; 
+  //proc++; 
 }
 
 //Refactored for exact match with jumping logic with kmer iterator
