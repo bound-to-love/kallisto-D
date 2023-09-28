@@ -1790,11 +1790,11 @@ while (kit != kit_end) { //should be + 2?
           }
         }
       } //NOTE!!! When this if is outside of the check if nextPos is at the end of the kmer, then we allow for incrementally searching which is the correct behavior? 
-      else {
+      //else {
         // the sequence is messed up at this point, let's just take the match
         //v.push_back({dbGraph.ecs[val.contig], l-k});
-        break;
-      }	
+        //break;
+      //}	
     //}  //adding this corresponding to NOTE!!!
   } 
   kit++; 
