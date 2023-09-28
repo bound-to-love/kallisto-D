@@ -1625,10 +1625,12 @@ while (kit != kit_end) { //should be + 2?
     
     if (proc < l - k - 1) {
     	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
-    	v.push_back({fum, proc});
 	if (!fum.isEmpty) {
-    		proc += fum.len;
-	} else proc++;
+		v.push_back({fum, proc});
+    		proc += fum.len+1;
+	} else {
+		proc++;
+	}
     }
 
     const_UnitigMap<Node> um = dbg.find(kit->first);
@@ -1696,10 +1698,10 @@ while (kit != kit_end) { //should be + 2?
           if (found2) {
             // great, a match (or nothing) see if we can move the k-mer forward
             if (found2pos >= l-k) { //should be +1?
-              v.push_back({um, l-k}); // push back a fake position //should be +2?
+              //v.push_back({um, l-k}); // push back a fake position //should be +2?
               break; //
             } else {
-              v.push_back({um, found2pos});
+              //v.push_back({um, found2pos});
 	      //trying incremental search
 	      //proc=found2pos;
 	      kit = kit2; // move iterator to this new position
@@ -1743,7 +1745,7 @@ while (kit != kit_end) { //should be + 2?
                       }
                     }
                   }
-                  v.push_back({um3, found3pos});
+                  //v.push_back({um3, found3pos});
                   if (nextPos >= l-k) { //should be +2?
                     break;
                   } else {
@@ -1782,7 +1784,7 @@ while (kit != kit_end) { //should be + 2?
                         }
                       }    
                     }
-                    v.push_back({um4, kit->second}); // add equivalence class, and position
+                    //v.push_back({um4, kit->second}); // add equivalence class, and position
                   }
                 }
 		if (kit->second >= nextPos) {
