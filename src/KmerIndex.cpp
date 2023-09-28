@@ -1626,7 +1626,9 @@ while (kit != kit_end) { //should be + 2?
     if (proc < l - k - 1) {
     	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
     	v.push_back({fum, proc});
-    	proc += fum.len; 
+	if (fum.isEmpty()) {
+    		proc += fum.len;
+	} else proc++;
     }
 
     const_UnitigMap<Node> um = dbg.find(kit->first);
