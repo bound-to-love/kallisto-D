@@ -1621,18 +1621,22 @@ void KmerIndex::match(const char *s, int l, std::vector<std::pair<const_UnitigMa
 Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
-while (kit != kit_end) { //should be + 2?
-    
-    if (proc < l - k - 1) {
-    	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
+size_t matches = 0; 
+while (proc < l - k - 1) {
+	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
 	if (!fum.isEmpty) {
 		v.push_back({fum, proc});
-    		proc += 15; //fum.len + 1
+		matches++; 
+		proc += 10; //fum.len + 1
 	} else {
 		proc++;
 	}
-    }
-
+}
+//Require at least 5 matches to kmers to consider read aligned 
+if (matches < 5) {
+	v.clear(); 
+}
+while (kit != kit_end) { //should be + 2?
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
     n = um.getData();
