@@ -2205,7 +2205,7 @@ int main(int argc, char *argv[]) {
               	if (fld_lr_c[i] > 0.0001) {
 	       	  flensout_f << std::fabs(index.target_lens_[i] - (double)fld_lr[i] / (double)fld_lr_c[i]); // take mean of recorded uniquely aligning read lengths 
  		} else {
-		  flensout_f << std::fabs(index.target_lens_[i]); 
+		  flensout_f << std::fabs(0);//index.target_lens_[i]); 
 		}
 	      }
                 flensout_f << "\n";
@@ -2290,9 +2290,9 @@ int main(int argc, char *argv[]) {
               flensout_f << " ";
             }
             if (fld_c[i] != 0) {
-	      flensout_f << std::fabs((double)fld[i] / (double)fld_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
+	      flensout_f << std::fabs(index.target_lens_[i] - (double)fld[i] / (double)fld_c[i] - 31); // take mean of recorded uniquely aligning read lengths 
  	    } else {
-	      flensout_f << std::fabs(index.target_lens_[i] - 31); 
+	      flensout_f << std::fabs(0); //index.target_lens_[i] - 31); 
 	    }
           }
           flensout_f << "\n";
