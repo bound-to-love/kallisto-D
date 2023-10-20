@@ -48,7 +48,8 @@ struct EMAlgorithm {
      double eff_len; 
      for (int i = 0; i < tc.flens_lr.size(); i++){
        if  (tc.flens_lr_c[i] < 0.000001){
-         eff_len = (int)index_.target_lens_[i]; //if we are not seeing this transcript uniquely mapping at all then just use the length of the transcript 
+         eff_len = 0; //switching to 0 for now. 
+         //(int)index_.target_lens_[i]; //if we are not seeing this transcript uniquely mapping at all then just use the length of the transcript 
        } else {
          eff_len = std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i]));//std::fabs((double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i])/double(tc.flens_lr_c[i])));
          //eff_len = (double)index_.target_lens_[i] - std::fabs(double(tc.flens_lr[i]-31*tc.flens_lr_c[i])/double(tc.flens_lr_c[i]));
