@@ -1627,7 +1627,7 @@ while (proc < l - k - 1) {
 	if (!fum.isEmpty) {
 		v.push_back({fum, proc});
 		matches++; 
-		proc += k; //fum.len + 1
+		proc += fum.len; //fum.len + 1
 	} else {
 		proc++;
 	}
