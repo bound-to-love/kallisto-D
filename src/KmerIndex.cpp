@@ -1627,7 +1627,7 @@ while (proc < l - k - 1) {
 	if (!fum.isEmpty) {
 		v.push_back({fum, proc});
 		matches++; 
-		proc += 10; //fum.len + 1
+		proc += k; //fum.len + 1
 	} else {
 		proc++;
 	}
@@ -1636,6 +1636,7 @@ while (proc < l - k - 1) {
 if (matches < 5) {
 	v.clear(); 
 }
+
 while (kit != kit_end) { //should be + 2?
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
