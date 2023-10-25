@@ -1624,16 +1624,16 @@ size_t proc = 0;
 size_t matches = 0; 
 while (proc < l - k - 1) {
 	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
-	if (!fum.isEmpty) {
+	if (!fum.isEmpty && fum.len > 0) {
 		v.push_back({fum, proc});
 		matches++; 
-		proc += fum.len; //fum.len + 1
+		proc += fum.len + 1; //fum.len + 1
 	} else {
 		proc++;
 	}
 }
 //Require at least 5 matches to kmers to consider read aligned 
-if (matches < 5) {
+if (matches < 3) {
 	v.clear(); 
 }
 
