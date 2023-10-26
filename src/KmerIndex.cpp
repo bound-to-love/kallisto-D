@@ -1630,7 +1630,7 @@ while (proc < l - k - 1) {
 		matches++; 
 		proc += fum.len + 1; //fum.len + 1
 	} else {
-		proc+= (int)(l/5);
+		proc+= (int)(l/10);
 	}
 }
 
