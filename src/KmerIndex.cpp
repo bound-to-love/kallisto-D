@@ -1622,8 +1622,19 @@ Roaring rtmp;
 KmerIterator kit(s), kit_end;
 size_t proc = 0;
 size_t matches = 0; 
+/***
+IS LOOP THE ISSUE WITH TIME?
 while (proc < l - k - 1) {
-	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
+	
+}
+//Require at least 5 matches to kmers to consider read aligned 
+if (matches < 3) {
+	v.clear(); 
+}
+***/
+
+while (kit != kit_end) { //should be + 2?
+    const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
 	if (!fum.isEmpty && fum.len > 0) {
 		v.push_back({fum, proc});
 		matches++; 
@@ -1631,13 +1642,7 @@ while (proc < l - k - 1) {
 	} else {
 		proc++;
 	}
-}
-//Require at least 5 matches to kmers to consider read aligned 
-if (matches < 3) {
-	v.clear(); 
-}
 
-while (kit != kit_end) { //should be + 2?
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
     n = um.getData();
@@ -1814,6 +1819,10 @@ while (kit != kit_end) { //should be + 2?
   } 
   kit++; 
   //proc++; 
+}
+//Require at least 5 matches to kmers to consider read aligned 
+if (matches < 3) {
+	v.clear(); 
 }
 
 //Refactored for exact match with jumping logic with kmer iterator
