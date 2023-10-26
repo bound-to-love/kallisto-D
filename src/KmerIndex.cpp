@@ -1623,6 +1623,7 @@ KmerIterator kit(s), kit_end;
 size_t proc = 15;
 size_t matches = 0; 
 
+/***
 while (proc < l - k - 1) {
 	const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
 	if (!fum.isEmpty && fum.len > 0) {
@@ -1633,8 +1634,16 @@ while (proc < l - k - 1) {
 		proc+= (int)(l/10);
 	}
 }
-
+***/
 while (kit != kit_end) { //should be + 2?
+    const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
+    if (!fum.isEmpty && fum.len > 0) {
+	v.push_back({fum, proc});
+	matches++; 
+	proc += fum.len + 1; //fum.len + 1
+    } else {
+	proc+= (int)(l/10);
+    }
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
     n = um.getData();
