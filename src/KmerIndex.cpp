@@ -1640,9 +1640,9 @@ while (kit != kit_end) { //should be + 2?
     if (!fum.isEmpty && fum.len > 0) {
 	v.push_back({fum, proc});
 	matches++; 
-	proc += fum.len + 1; //fum.len + 1
+	proc += fum.len + 10; //step of k
     } else {
-	proc+= (int)(l/10);
+	proc+= 10;
     }
     const_UnitigMap<Node> um = dbg.find(kit->first);
 	
