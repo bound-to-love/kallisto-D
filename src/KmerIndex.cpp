@@ -1639,7 +1639,7 @@ while (kit != kit_end) { //should be + 2?
     const_UnitigMap<Node> fum = dbg.findUnitig(s, proc, l);  
     if (!fum.isEmpty && fum.len > 0) {
 	v.push_back({fum, proc});
-	matches++; 
+	//matches++; 
 	proc += fum.len + 10; //step of k
     } else {
 	proc+= 10;
@@ -1822,9 +1822,9 @@ while (kit != kit_end) { //should be + 2?
   //proc++; 
 }
 //Require at least 5 matches to kmers to consider read aligned 
-if (matches < 3) {
-	v.clear(); 
-}
+//if (matches < 3) {
+//	v.clear(); 
+//}
 
 //Refactored for exact match with jumping logic with kmer iterator
 /***
